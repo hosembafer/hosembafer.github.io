@@ -187,14 +187,19 @@
         .links {
             list-style: none;
             display: flex;
-            gap: 0;
+            gap: 0.5rem;
             flex-wrap: wrap;
         }
 
+        .links li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
         .links li::after {
-            content: "/ ";
+            content: "/";
             color: var(--separator);
-            margin: 0 0.875rem;
         }
 
         .links li:last-child::after {
