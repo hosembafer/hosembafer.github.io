@@ -23,9 +23,17 @@ To view the website locally, simply open `index.html` in your browser.
 
 ## Customization
 
-- Edit `index.html` to update content
-- Modify `style.css` to change the design
-- Add images to an `assets` or `images` folder if needed
+- Edit `index.html` to update content and styles (CSS is embedded in the `<style>` tag)
+- Add images to the `images` folder
+- The site features a dark/light theme toggle that respects system preferences
+
+## Features
+
+- Minimalistic, monospace design
+- Dark/light theme toggle with system preference detection
+- Responsive layout for mobile and desktop
+- Profile photo with grayscale filter
+- Links to GitHub, LinkedIn, Medium, and Buy Me a Coffee
 
 ## SEO Best Practices
 
@@ -35,3 +43,4 @@ The website includes:
 - Proper heading hierarchy
 - Accessible links with `rel="noopener"` for external links
 - Responsive design for mobile devices
+- Theme persistence using localStorage
