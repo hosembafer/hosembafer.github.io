@@ -208,10 +208,19 @@
             opacity: 1;
             transition: opacity 0.3s, color 0.3s;
             color: var(--toggle);
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             &:hover {
                 opacity: 0.7;
             }
+        }
+
+        body[data-theme="dark"] .theme-toggle {
+            font-size: 1.7rem;
         }
 
         @media (max-width: 768px) {
