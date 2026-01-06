@@ -237,7 +237,7 @@
     </style>
 </head>
 <body>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">●</button>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">☼</button>
     <div class="container">
         <header>
             <img src="images/profile.jpg" alt="Rafayel Hovhannisyan" class="profile-photo" width="120" height="120">
@@ -296,7 +296,7 @@
 
             function setTheme(theme) {
                 document.body.setAttribute('data-theme', theme);
-                toggle.textContent = '●';
+                toggle.textContent = theme === 'dark' ? '☽' : '☼';
                 localStorage.setItem('theme', theme);
             }
 
