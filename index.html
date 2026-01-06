@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rafayel Hovhannisyan - Senior Software Engineer with over 15 years of experience specializing in startups, scaleups, and large enterprise applications.">
+    <meta name="author" content="Rafayel Hovhannisyan">
+    <title>Rafayel Hovhannisyan | Software Engineer</title>
+    <style>
+        :root {
+            --bg: #f5f5f5;
+            --text: #222;
+            --text-heading: #000;
+            --text-secondary: #333;
+            --text-muted: #666;
+            --border: #333;
+            --border-photo: #333;
+            --link: #000;
+            --link-hover-bg: #000;
+            --link-hover-text: #fff;
+            --separator: #999;
+            --toggle: #222;
+        }
+
+        body[data-theme="dark"] {
+            --bg: #1a1a1a;
+            --text: #e0e0e0;
+            --text-heading: #f0f0f0;
+            --text-secondary: #e0e0e0;
+            --text-muted: #888;
+            --border: #444;
+            --border-photo: #666;
+            --link: #f0f0f0;
+            --link-hover-bg: #f0f0f0;
+            --link-hover-text: #1a1a1a;
+            --separator: #666;
+            --toggle: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', 'Courier', monospace;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0;
+            padding: 2rem 3rem;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 2rem 0 1.5rem;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .profile-photo {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border: 2px solid var(--border-photo);
+            filter: grayscale(100%) contrast(1.1);
+            flex-shrink: 0;
+        }
+
+        .header-text {
+            flex: 1;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        main {
+            padding: 1rem 0;
+        }
+
+        section {
+            margin-bottom: 2.5rem;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .about p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            max-width: 700px;
+        }
+
+        .location {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-style: italic;
+        }
+
+        .writing p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .writing a {
+            color: var(--link);
+            text-decoration: underline;
+        }
+
+        .writing a:hover {
+            background-color: var(--link-hover-bg);
+            color: var(--link-hover-text);
+        }
+
+        .now p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .links {
+            list-style: none;
+            display: flex;
+            gap: 0;
+            flex-wrap: wrap;
+        }
+
+        .links li::after {
+            content: " / ";
+            color: var(--separator);
+            margin: 0 0.5rem;
+        }
+
+        .links li:last-child::after {
+            content: "";
+        }
+
+        .links a {
+            color: var(--link);
+            text-decoration: underline;
+            font-size: 1rem;
+        }
+
+        .links a:hover {
+            background-color: var(--link-hover-bg);
+            color: var(--link-hover-text);
+        }
+
+        footer {
+            padding: 2rem 0 1rem;
+            border-top: 2px solid var(--border);
+            margin-top: 3rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            line-height: 1;
+            opacity: 0.7;
+            transition: opacity 0.3s, color 0.3s;
+            color: var(--toggle);
+        }
+
+        .theme-toggle:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem 1.5rem;
+            }
+
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .profile-photo {
+                width: 100px;
+                height: 100px;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .subtitle {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">●</button>
+    <div class="container">
+        <header>
+            <img src="images/profile.jpg" alt="Rafayel Hovhannisyan" class="profile-photo">
+            <div class="header-text">
+                <h1>Rafayel Hovhannisyan</h1>
+                <p class="subtitle">Senior Software Engineer</p>
+            </div>
+        </header>
+
+        <main>
+            <section class="about">
+                <p>
+                    I'm a software engineer with over 15 years of experience building products for startups,
+                    scaleups, and large enterprises. I'm passionate about scalable solutions and contributing
+                    to open source.
+                </p>
+                <p><strong>ONLY COMPLEX AND CHALLENGING PROJECTS</strong></p>
+                <p class="location">Based in Yerevan, Armenia</p>
+            </section>
+
+            <section class="now">
+                <h2>Now</h2>
+                <p>I'm focused on Angular, NestJS, Go, and some React.</p>
+            </section>
+
+            <section class="writing">
+                <h2>Writing</h2>
+                <p>I occasionally write about software engineering on <a href="https://medium.com/@hosembafer" target="_blank" rel="noopener">Medium</a>.</p>
+            </section>
+
+            <section class="connect">
+                <h2>Connect</h2>
+                <ul class="links">
+                    <li><a href="mailto:rafayel.hovhannisyan.95@gmail.com">Email</a></li>
+                    <li><a href="https://github.com/hosembafer" target="_blank" rel="noopener">GitHub</a></li>
+                    <li><a href="https://www.linkedin.com/in/rafayel-hovhannisyan-3045a09b/" target="_blank" rel="noopener">LinkedIn</a></li>
+                    <li><a href="https://medium.com/@hosembafer" target="_blank" rel="noopener">Medium</a></li>
+                    <li><a href="https://buymeacoffee.com/hosembafer" target="_blank" rel="noopener">Buy Me a Coffee</a></li>
+                </ul>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 Rafayel Hovhannisyan</p>
+        </footer>
+    </div>
+    <script>
+        (function() {
+            const toggle = document.getElementById('themeToggle');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+            function getTheme() {
+                const saved = localStorage.getItem('theme');
+                if (saved) return saved;
+                return prefersDark.matches ? 'dark' : 'light';
+            }
+
+            function setTheme(theme) {
+                document.body.setAttribute('data-theme', theme);
+                toggle.textContent = '●';
+                localStorage.setItem('theme', theme);
+            }
+
+            setTheme(getTheme());
+
+            toggle.addEventListener('click', () => {
+                const current = document.body.getAttribute('data-theme') || 'light';
+                setTheme(current === 'dark' ? 'light' : 'dark');
+            });
+
+            prefersDark.addEventListener('change', (e) => {
+                if (!localStorage.getItem('theme')) {
+                    setTheme(e.matches ? 'dark' : 'light');
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
