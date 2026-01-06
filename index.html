@@ -25,8 +25,7 @@
         "sameAs": [
             "https://github.com/hosembafer",
             "https://www.linkedin.com/in/rafayel-hovhannisyan-3045a09b/",
-            "https://medium.com/@hosembafer",
-            "https://buymeacoffee.com/hosembafer"
+            "https://medium.com/@hosembafer"
         ],
         "knowsAbout": [
             "Angular",
@@ -91,6 +90,12 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
+        hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 2rem 0;
+        }
+
         .container {
             max-width: 900px;
             margin: 0;
@@ -100,20 +105,15 @@
 
         header {
             padding: 2rem 0 1.5rem;
-            border-bottom: 2px solid var(--border);
-            margin-bottom: 2rem;
             display: flex;
             align-items: center;
             gap: 2rem;
         }
 
         .profile-photo {
-            width: 120px;
-            height: 120px;
             object-fit: cover;
             border: 2px solid var(--border-photo);
             border-radius: 4px;
-            filter: grayscale(100%) contrast(1.1);
             flex-shrink: 0;
         }
 
@@ -137,10 +137,9 @@
 
         main {
             padding: 1rem 0;
-        }
-
-        section {
-            margin-bottom: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
         }
 
         h2 {
@@ -215,8 +214,6 @@
 
         footer {
             padding: 2rem 0 1rem;
-            border-top: 2px solid var(--border);
-            margin-top: 3rem;
             color: var(--text-muted);
             font-size: 0.9rem;
         }
@@ -270,13 +267,13 @@
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">●</button>
     <div class="container">
         <header>
-            <img src="images/profile.jpg" alt="Rafayel Hovhannisyan" class="profile-photo">
+            <img src="images/profile.jpg" alt="Rafayel Hovhannisyan" class="profile-photo" width="120" height="120">
             <div class="header-text">
                 <h1>Rafayel Hovhannisyan</h1>
                 <p class="subtitle">Senior Software Engineer</p>
             </div>
         </header>
-
+        <hr />
         <main>
             <section class="about">
                 <p>
@@ -305,11 +302,10 @@
                     <li><a href="https://github.com/hosembafer" target="_blank" rel="noopener">GitHub</a></li>
                     <li><a href="https://www.linkedin.com/in/rafayel-hovhannisyan-3045a09b/" target="_blank" rel="noopener">LinkedIn</a></li>
                     <li><a href="https://medium.com/@hosembafer" target="_blank" rel="noopener">Medium</a></li>
-                    <li><a href="https://buymeacoffee.com/hosembafer" target="_blank" rel="noopener">Buy Me a Coffee</a></li>
                 </ul>
             </section>
         </main>
-
+        <hr />
         <footer>
             <p>&copy; 2026 Rafayel Hovhannisyan</p>
         </footer>
