@@ -66,13 +66,13 @@
             --text-heading: #f0f0f0;
             --text-secondary: #e0e0e0;
             --text-muted: #888;
-            --border: #444;
-            --border-photo: #666;
+            --border: #ccc;
+            --border-photo: #ccc;
             --link: #f0f0f0;
             --link-hover-bg: #f0f0f0;
             --link-hover-text: #1a1a1a;
             --separator: #666;
-            --toggle: #e0e0e0;
+            --toggle: #ccc;
         }
 
         * {
@@ -111,10 +111,10 @@
         }
 
         .profile-photo {
-            object-fit: cover;
-            border: 2px solid var(--border-photo);
+            border: 1px solid var(--border-photo);
             border-radius: 4px;
             flex-shrink: 0;
+            box-sizing: content-box;
         }
 
         .header-text {
