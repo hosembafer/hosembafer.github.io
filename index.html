@@ -198,6 +198,46 @@
             content: "";
         }
 
+        .email-display {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .email-display code {
+            color: var(--text-secondary);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .email-display code:hover {
+            background-color: var(--link-hover-bg);
+            color: var(--link-hover-text);
+        }
+
+        .copy-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.85rem;
+            padding: 0.2rem 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--link-hover-bg);
+            color: var(--link-hover-text);
+            border-color: var(--link-hover-bg);
+        }
+
+        .copy-btn.copied {
+            border-color: var(--text-muted);
+        }
+
         footer {
             padding: 2rem 0 1rem;
             color: var(--text-muted);
@@ -290,6 +330,10 @@
                     <li><a href="https://www.linkedin.com/in/rafayel-hovhannisyan-3045a09b/" target="_blank" rel="noopener">LinkedIn</a></li>
                     <li><a href="https://medium.com/@hosembafer" target="_blank" rel="noopener">Medium</a></li>
                 </ul>
+                <div class="email-display">
+                    <code id="emailAddress">rafayel.hovhannisyan.95@gmail.com</code>
+                    <button class="copy-btn" id="copyEmail">Copy</button>
+                </div>
             </section>
         </main>
         <hr />
@@ -326,6 +370,26 @@
                     setTheme(e.matches ? 'dark' : 'light');
                 }
             });
+
+            // Email copy functionality
+            const emailAddress = document.getElementById('emailAddress');
+            const copyBtn = document.getElementById('copyEmail');
+
+            function copyEmail() {
+                const email = emailAddress.textContent;
+                navigator.clipboard.writeText(email).then(() => {
+                    const originalText = copyBtn.textContent;
+                    copyBtn.textContent = 'Copied!';
+                    copyBtn.classList.add('copied');
+                    setTimeout(() => {
+                        copyBtn.textContent = originalText;
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                });
+            }
+
+            copyBtn.addEventListener('click', copyEmail);
+            emailAddress.addEventListener('click', copyEmail);
         })();
     </script>
 </body>
