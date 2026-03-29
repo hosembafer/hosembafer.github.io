@@ -22,24 +22,24 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Why meaningful domain types are safer, clearer, and easier to evolve than bare strings, numbers, and booleans.">
+    <meta name="description" content="A practical case for domain-specific types over bare primitives.">
     <meta name="author" content="Rafayel Hovhannisyan">
     <meta name="robots" content="index, follow">
     <meta name="generator" content="Minimal static site generator">
     <meta name="color-scheme" content="light dark">
-    <link rel="canonical" href="https://hosembafer.github.io/articles/always-use-domain-specific-types-for-primitives">
+    <link rel="canonical" href="https://hosembafer.github.io/documents/always-use-domain-specific-types-for-primitives">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
     <title>Always Use Domain-Specific Types for Primitives | Rafayel Hovhannisyan</title>
     <meta property="og:site_name" content="Rafayel Hovhannisyan">
     <meta property="og:type" content="article">
     <meta property="og:title" content="Always Use Domain-Specific Types for Primitives | Rafayel Hovhannisyan">
-    <meta property="og:description" content="Why meaningful domain types are safer, clearer, and easier to evolve than bare strings, numbers, and booleans.">
-    <meta property="og:url" content="https://hosembafer.github.io/articles/always-use-domain-specific-types-for-primitives">
+    <meta property="og:description" content="A practical case for domain-specific types over bare primitives.">
+    <meta property="og:url" content="https://hosembafer.github.io/documents/always-use-domain-specific-types-for-primitives">
     <meta property="og:image" content="https://hosembafer.github.io/images/profile-square.png">
     <meta property="og:image:alt" content="Portrait of Rafayel Hovhannisyan">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Always Use Domain-Specific Types for Primitives | Rafayel Hovhannisyan">
-    <meta name="twitter:description" content="Why meaningful domain types are safer, clearer, and easier to evolve than bare strings, numbers, and booleans.">
+    <meta name="twitter:description" content="A practical case for domain-specific types over bare primitives.">
     <meta name="twitter:image" content="https://hosembafer.github.io/images/profile-square.png">
     <meta property="article:published_time" content="2026-03-29T00:00:00.000Z">
     <meta property="article:modified_time" content="2026-03-29T00:00:00.000Z">
@@ -89,7 +89,7 @@
         {
             "@type": "Article",
             "headline": "Always Use Domain-Specific Types for Primitives",
-            "description": "Why meaningful domain types are safer, clearer, and easier to evolve than bare strings, numbers, and booleans.",
+            "description": "A practical case for domain-specific types over bare primitives.",
             "datePublished": "2026-03-29T00:00:00.000Z",
             "dateModified": "2026-03-29T00:00:00.000Z",
             "author": {
@@ -100,8 +100,8 @@
             "image": [
                 "https://hosembafer.github.io/images/profile-square.png"
             ],
-            "mainEntityOfPage": "https://hosembafer.github.io/articles/always-use-domain-specific-types-for-primitives",
-            "url": "https://hosembafer.github.io/articles/always-use-domain-specific-types-for-primitives",
+            "mainEntityOfPage": "https://hosembafer.github.io/documents/always-use-domain-specific-types-for-primitives",
+            "url": "https://hosembafer.github.io/documents/always-use-domain-specific-types-for-primitives",
             "keywords": "type systems, domain modeling, software design, typescript"
         },
         {
@@ -117,7 +117,7 @@
                     "@type": "ListItem",
                     "position": 2,
                     "name": "Always Use Domain-Specific Types for Primitives",
-                    "item": "https://hosembafer.github.io/articles/always-use-domain-specific-types-for-primitives"
+                    "item": "https://hosembafer.github.io/documents/always-use-domain-specific-types-for-primitives"
                 }
             ]
         }
@@ -144,9 +144,9 @@
 
 <article class="article-hero">
     <div class="article-breadcrumbs"><a href="/">Home</a> / Always Use Domain-Specific Types for Primitives</div>
-    <p class="article-meta"><span>Architecture Essay</span><span>March 29, 2026</span><span>5 min read</span></p>
+    <p class="article-meta"><span>Engineering Document</span><span>March 29, 2026</span><span>5 min read</span></p>
     <h1>Always Use Domain-Specific Types for Primitives</h1>
-    <p class="article-hero__dek">Why meaningful domain types are safer, clearer, and easier to evolve than bare strings, numbers, and booleans.</p>
+    <p class="article-hero__dek">A practical case for domain-specific types over bare primitives.</p>
     <ul class="article-tags">
         <li>type systems</li><li>domain modeling</li><li>software design</li><li>typescript</li>
     </ul>
@@ -154,10 +154,22 @@
 <div class="article-content-wrap">
     <article class="article-content prose">
 <h1>Always Use Domain-Specific Types for Primitives</h1>
+<h2>Abstract</h2>
+<p>This document recommends using domain-specific types for values whose meaning matters to the business domain. Primitive types are appropriate for representation, but they are too weak to encode intent, constraints, and safe usage across a system.</p>
+<p>The goal is not to wrap every <code>string</code> or <code>number</code>. The goal is to make ambiguous, high-cost values explicit at system boundaries and inside public APIs, so invalid assumptions become harder to express and easier to detect.</p>
+<h2>Problem</h2>
 <p>Most software systems do not fail because <code>string</code>, <code>number</code>, or <code>boolean</code> are bad tools. They fail because those tools are asked to carry domain meaning that the code never makes explicit.</p>
-<p>A <code>string</code> might be an email address, a country code, a customer id, a discount code, or an ISO timestamp. A <code>number</code> might be money, a quantity, a retry count, or a percentage. The machine is satisfied because all of them are valid primitives. The business is not, because those values are not interchangeable.</p>
-<p>That gap is where confusion enters the system.</p>
-<h2>Primitives Store Data, Types Carry Meaning</h2>
+<p>A <code>string</code> might be an email address, a country code, a customer id, a discount code, or an ISO timestamp. A <code>number</code> might be money, a quantity, a retry count, or a percentage. The runtime accepts all of them as valid primitives. The business domain does not, because those values are not interchangeable.</p>
+<p>This usually shows up in a few recurring ways:</p>
+<ul>
+<li>multiple parameters share the same primitive type but have different semantics</li>
+<li>validation rules are repeated near call sites instead of being centralized</li>
+<li>identifiers from different contexts can be passed into the same function</li>
+<li>money, percentages, and quantities are all treated as generic numbers</li>
+<li>boolean flags begin to encode business modes rather than simple toggles</li>
+</ul>
+<p>These are signs that domain meaning is missing from the type model.</p>
+<h2>Core Principle</h2>
 <p>A primitive tells you how something is represented in memory. It does not tell you what the value is allowed to mean inside the business domain.</p>
 <p>If a function accepts this:</p>
 <div class="code-block"><div class="code-block__label">TypeScript</div><pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">createAccount</span>(<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">email</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">retryCount</span>: <span class="hljs-built_in">number</span></span>) {}
@@ -169,34 +181,31 @@
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">createAccount</span>(<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-title class_">CustomerId</span>, <span class="hljs-attr">email</span>: <span class="hljs-title class_">EmailAddress</span>, <span class="hljs-attr">retryCount</span>: <span class="hljs-title class_">RetryCount</span></span>) {}
 </code></pre></div><p>The underlying storage is still primitive, but the code now exposes the domain. That improves review quality, reduces accidental mixups, and makes future change much safer.</p>
-<h2>Primitive Obsession Is Really Meaning Obsession</h2>
-<p>Teams often describe this problem as primitive obsession. The deeper problem is not stylistic. It is that the code keeps losing meaning at exactly the places where meaning matters most.</p>
-<p>You can usually spot it when:</p>
+<h2>Recommendations</h2>
+<p>Use domain-specific types when swapping two values of the same primitive type would be a real bug.</p>
+<p>Prioritize them in these cases:</p>
 <ul>
-<li>multiple parameters have the same primitive type but different semantics</li>
-<li>validation rules are repeated near call sites</li>
-<li>ids from different contexts can be passed into the same function</li>
-<li>money, percentages, and quantities are all represented as bare numbers</li>
-<li>boolean flags start to encode business modes rather than simple toggles</li>
+<li>identifiers</li>
+<li>money and currency amounts</li>
+<li>email addresses, phone numbers, and URLs</li>
+<li>percentages, rates, and quantities</li>
+<li>bounded counters or scores</li>
+<li>date ranges and domain timestamps</li>
 </ul>
-<p>These are all signs that the domain model is too weak for the system it is trying to describe.</p>
-<h2>Domain Types Improve Boundaries</h2>
-<p>The biggest benefit of domain-specific primitive types is not just local correctness. It is better boundaries.</p>
-<div class="mermaid-diagram" data-mermaid-source="flowchart%20LR%0A%20%20Input%5BExternal%20Input%5D%20--%3E%20Validation%5BValidation%20and%20Parsing%5D%0A%20%20Validation%20--%3E%20Domain%5BDomain%20Types%5D%0A%20%20Domain%20--%3E%20Rules%5BBusiness%20Rules%5D%0A%20%20Rules%20--%3E%20Output%5BSerialization%20at%20the%20Boundary%5D"></div><p>The boundary is where raw primitives should be parsed, validated, and converted into domain values. Once data crosses into the core of the system, it should stop behaving like an anonymous <code>string</code> or <code>number</code>.</p>
-<p>That creates a simple rule:</p>
-<ul>
-<li>parse primitives at the edge</li>
-<li>use domain types in the core</li>
-<li>serialize back to primitives only when leaving the system</li>
-</ul>
-<p>This separation makes it much harder for invalid or ambiguous values to drift through internal code.</p>
-<blockquote>
-<p>Do you think it’s an imaginary situation? <a href="https://www.simscale.com/blog/nasa-mars-climate-orbiter-metric/" target="_blank" rel="noopener">Read</a> <a href="https://solarsystem.nasa.gov/missions/mars-climate-orbiter/in-depth/" target="_blank" rel="noopener">about</a> how NASA lost one of its spacecrafts (<strong>Mars Climate Orbiter</strong>) due to a metric math mistake on September 23, 1999, which resulted in a costly loss of $125 million ($229M in today’s currency). In short, the mission was unsuccessful due to a navigation error caused by a failure to translate English units to metric.</p>
-</blockquote>
-<h2>The Compiler Should Help With Illegal States</h2>
-<p>One of the most useful design goals in software is to make illegal states difficult or impossible to represent.</p>
-<p>A primitive-heavy model does the opposite. It expands the number of values the system can accept while leaving validation as a social convention.</p>
-<p>For example:</p>
+<p>Apply them according to these rules:</p>
+<ol>
+<li>parse and validate raw primitives at the system boundary</li>
+<li>convert validated input into domain-specific types</li>
+<li>use domain-specific types throughout the business core</li>
+<li>serialize back to primitives only when data leaves the system</li>
+</ol>
+<p>Values with no business ambiguity and no meaningful rules can remain plain primitives.</p>
+<h2>Boundary Model</h2>
+<div class="mermaid-diagram" data-mermaid-source="flowchart%20LR%0A%20%20Input%5BExternal%20Input%5D%20--%3E%20Validation%5BValidation%20and%20Parsing%5D%0A%20%20Validation%20--%3E%20Domain%5BDomain%20Types%5D%0A%20%20Domain%20--%3E%20Rules%5BBusiness%20Rules%5D%0A%20%20Rules%20--%3E%20Output%5BSerialization%20at%20the%20Boundary%5D"></div><p>The system boundary is where raw primitives should be parsed, validated, and converted into domain values. Once data crosses into the core, it should stop behaving like an anonymous <code>string</code> or <code>number</code>.</p>
+<p>This separation gives the core model stronger guarantees and reduces the chance that invalid or ambiguous values drift through internal code.</p>
+<h2>Examples</h2>
+<h3>Construction and Validation</h3>
+<p>One useful design goal is to make illegal states difficult to represent. Domain constructors and parsers are one of the simplest ways to do that.</p>
 <div class="code-block"><div class="code-block__label">TypeScript</div><pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Percentage</span> = <span class="hljs-built_in">number</span> &amp; { <span class="hljs-keyword">readonly</span> <span class="hljs-attr">brand</span>: <span class="hljs-string">&#x27;Percentage&#x27;</span> };
 
 <span class="hljs-keyword">function</span> <span class="hljs-title function_">makePercentage</span>(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">number</span></span>): <span class="hljs-title class_">Percentage</span> {
@@ -206,41 +215,30 @@
 
   <span class="hljs-keyword">return</span> value <span class="hljs-keyword">as</span> <span class="hljs-title class_">Percentage</span>;
 }
-</code></pre></div><p>After the value is constructed, downstream code no longer has to wonder whether <code>137</code> accidentally slipped in. The validation becomes part of the type’s entry point, not an informal hope scattered across the call graph.</p>
-<h2>Use Types Where Confusion Is Expensive</h2>
-<p>This does not mean every primitive deserves a wrapper. The point is not ceremony. The point is precision.</p>
-<p>Good candidates for domain-specific types are:</p>
-<ul>
-<li>identifiers</li>
-<li>money and currency amounts</li>
-<li>email addresses, phone numbers, and URLs</li>
-<li>percentages, rates, and quantities</li>
-<li>bounded counters or scores</li>
-<li>date ranges and domain timestamps</li>
-</ul>
-<p>Weak candidates are usually values with no business ambiguity and no rules beyond simple representation.</p>
-<p>The test is straightforward: if swapping two values of the same primitive type would be a real bug, they should probably not share the same type in your domain model.</p>
-<h2>Domain Types Also Improve APIs</h2>
+</code></pre></div><p>After the value is constructed, downstream code no longer has to wonder whether <code>137</code> accidentally slipped in. Validation becomes part of the type entry point rather than an informal convention scattered across the call graph.</p>
+<h3>API Design</h3>
 <p>APIs become easier to evolve when their signatures express intent clearly. A function that accepts <code>CustomerId</code> is easier to use correctly than one that accepts <code>string</code>. A service returning <code>EmailAddress | null</code> communicates more than one returning <code>string | null</code>.</p>
 <p>This matters even more in larger systems, because types become part of team communication. They document expectations in a way comments rarely sustain over time.</p>
-<p>Good domain types help with:</p>
+<p>Domain-specific types help with:</p>
 <ul>
 <li>onboarding, because the vocabulary is embedded in the code</li>
 <li>refactoring, because type errors expose invalid assumptions</li>
 <li>code review, because intent is visible at call sites</li>
 <li>testing, because fixtures are shaped by real business concepts</li>
 </ul>
-<p>That is a compounding advantage, not a local one.</p>
-<h2>The Goal Is Not Fancy Types</h2>
-<p>It is possible to overdo this. If every line requires a new wrapper or factory, the model can become noisy and harder to use. The solution is not to abandon domain types. It is to introduce them where they remove ambiguity rather than where they merely add formality.</p>
-<p>A healthy rule is:</p>
+<h2>Exceptions and Tradeoffs</h2>
+<p>It is possible to overdo this. If every line requires a new wrapper or factory, the model can become noisy and harder to use. The answer is not to avoid domain types entirely. The answer is to introduce them where they remove ambiguity rather than where they merely add formality.</p>
+<p>This approach should remain selective:</p>
 <ol>
-<li>start with the places where confusion already caused bugs</li>
+<li>start with places where confusion already caused bugs or near-misses</li>
 <li>promote repeated validation rules into constructors or parsers</li>
 <li>make domain names visible in public APIs first</li>
-<li>keep the conversion cost near boundaries, not everywhere</li>
+<li>keep conversion cost near boundaries, not everywhere</li>
 </ol>
-<p>This keeps the model practical.</p>
+<h2>References</h2>
+<blockquote>
+<p>A real-world failure case exists outside software APIs as well. <a href="https://www.simscale.com/blog/nasa-mars-climate-orbiter-metric/" target="_blank" rel="noopener">Read</a> <a href="https://solarsystem.nasa.gov/missions/mars-climate-orbiter/in-depth/" target="_blank" rel="noopener">about</a> how NASA lost <strong>Mars Climate Orbiter</strong> on September 23, 1999 due to a failure to translate English units to metric, resulting in a mission loss valued at $125 million at the time.</p>
+</blockquote>
 <h2>Conclusion</h2>
 <p>Bare primitives are cheap to write and expensive to trust. Domain-specific types invert that trade-off. They ask for a bit more intention up front so the rest of the system can be simpler, safer, and easier to read.</p>
 <p>That is usually the right deal. If two values mean different things in the business, they should not look identical in the code.</p>

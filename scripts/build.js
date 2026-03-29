@@ -6,10 +6,10 @@ const MarkdownIt = require('markdown-it');
 
 const ROOT = path.resolve(__dirname, '..');
 const SRC_DIR = path.join(ROOT, 'src');
-const ARTICLES_SRC_DIR = path.join(SRC_DIR, 'articles');
+const DOCUMENTS_SRC_DIR = path.join(SRC_DIR, 'documents');
 const TEMPLATES_DIR = path.join(SRC_DIR, 'templates');
 const PARTIALS_DIR = path.join(SRC_DIR, 'partials');
-const OUTPUT_ARTICLES_DIR = path.join(ROOT, 'articles');
+const OUTPUT_DOCUMENTS_DIR = path.join(ROOT, 'documents');
 
 const SITE = {
     name: 'Rafayel Hovhannisyan',
@@ -179,11 +179,11 @@ function toDate(value, label) {
     return parsed;
 }
 
-function loadArticles() {
-    const filenames = fs.readdirSync(ARTICLES_SRC_DIR).filter((name) => name.endsWith('.md'));
+function loadDocuments() {
+    const filenames = fs.readdirSync(DOCUMENTS_SRC_DIR).filter((name) => name.endsWith('.md') && !name.startsWith('.'));
 
     return filenames.map((filename) => {
-        const source = readFile(path.join(ARTICLES_SRC_DIR, filename));
+        const source = readFile(path.join(DOCUMENTS_SRC_DIR, filename));
         const parsed = matter(source);
         const data = parsed.data;
 
@@ -194,7 +194,7 @@ function loadArticles() {
         const isExternal = Boolean(data.external_url);
         const rendered = parsed.content.trim() ? md.render(parsed.content) : '';
         const plainText = rendered ? stripHtml(rendered) : '';
-        const articleUrl = isExternal ? data.external_url : `${SITE.url}/articles/${data.slug}`;
+        const articleUrl = isExternal ? data.external_url : `${SITE.url}/documents/${data.slug}`;
         const publishedAt = data.date ? toDate(data.date, `${filename} date`) : null;
         const updatedAt = data.updated ? toDate(data.updated, `${filename} updated`) : publishedAt;
         const readingTime = data.reading_time || (parsed.content.trim() ? estimateReadingTime(`${data.title} ${parsed.content}`) : null);
@@ -223,10 +223,10 @@ function loadArticles() {
     });
 }
 
-function articleListMarkup(articles, headingLevel) {
+function documentListMarkup(documents, headingLevel) {
     return [
         '<ul class="article-list">',
-        ...articles.map((article) => {
+        ...documents.map((article) => {
             const tag = headingLevel === 'h2' ? 'h2' : 'h3';
             const meta = [article.type];
 
@@ -247,7 +247,7 @@ function articleListMarkup(articles, headingLevel) {
             return `
             <li class="article-item">
                 <p class="article-meta">${meta.map((item) => `<span>${item}</span>`).join('')}</p>
-                <${tag}><a href="${article.isExternal ? article.url : `/articles/${article.slug}`}"${targetAttrs}>${article.title}</a></${tag}>
+                <${tag}><a href="${article.isExternal ? article.url : `/documents/${article.slug}`}"${targetAttrs}>${article.title}</a></${tag}>
                 <p class="article-summary">${article.summary}</p>
             </li>`;
         }),
@@ -328,16 +328,16 @@ function pageData({ title, description, canonicalPath, ogType, bodyClass, conten
     });
 }
 
-function buildHomePage(articles) {
+function buildHomePage(documents) {
     const template = readFile(path.join(TEMPLATES_DIR, 'home.html'));
     const content = renderTemplate(template, {
-        articlesPreview: articleListMarkup(articles, 'h3')
+        documentsPreview: documentListMarkup(documents, 'h3')
     });
 
     const structuredData = personStructuredData();
     const html = pageData({
-        title: 'Rafayel Hovhannisyan | Architecture Articles and Software Engineering',
-        description: 'Architecture-level articles on frontend systems, API design, and operable software engineering by Rafayel Hovhannisyan.',
+        title: 'Rafayel Hovhannisyan | Living Documents and Software Engineering',
+        description: 'Living documents on frontend systems, API design, and operable software engineering by Rafayel Hovhannisyan.',
         canonicalPath: '',
         ogType: 'website',
         bodyClass: 'page-home',
@@ -349,8 +349,8 @@ function buildHomePage(articles) {
     writeFile(path.join(ROOT, 'index.html'), html);
 }
 
-function buildArticlePages(articles) {
-    for (const article of articles.filter((entry) => !entry.isExternal)) {
+function buildDocumentPages(documents) {
+    for (const article of documents.filter((entry) => !entry.isExternal)) {
         const content = `
 <article class="article-hero">
     <div class="article-breadcrumbs"><a href="/">Home</a> / ${article.title}</div>
@@ -410,12 +410,12 @@ ${article.html}
         const html = pageData({
             title: `${article.title} | Rafayel Hovhannisyan`,
             description: article.description,
-            canonicalPath: `/articles/${article.slug}`,
+            canonicalPath: `/documents/${article.slug}`,
             ogType: 'article',
             bodyClass: 'page-article',
             content,
             structuredData,
-            activeNav: 'articles',
+            activeNav: 'home',
             twitterCard: 'summary_large_image',
             extraMeta: [
                 `<meta property="article:published_time" content="${article.date.toISOString()}">`,
@@ -424,14 +424,14 @@ ${article.html}
             ].join('\n')
         });
 
-        writeFile(path.join(OUTPUT_ARTICLES_DIR, article.slug, 'index.html'), html);
+        writeFile(path.join(OUTPUT_DOCUMENTS_DIR, article.slug, 'index.html'), html);
     }
 }
 
-function buildSitemap(articles) {
+function buildSitemap(documents) {
     const urls = [
         `${SITE.url}`,
-        ...articles.filter((article) => !article.isExternal).map((article) => article.url)
+        ...documents.filter((article) => !article.isExternal).map((article) => article.url)
     ];
 
     const xml = [
@@ -456,21 +456,21 @@ function buildRobots() {
 }
 
 function cleanOutput() {
-    fs.rmSync(OUTPUT_ARTICLES_DIR, { recursive: true, force: true });
+    fs.rmSync(path.join(ROOT, 'articles'), { recursive: true, force: true });
+    fs.rmSync(OUTPUT_DOCUMENTS_DIR, { recursive: true, force: true });
 }
 
 function buildSite() {
-    const articles = loadArticles();
+    const documents = loadDocuments();
 
     cleanOutput();
-    buildHomePage(articles);
-    
-    buildArticlePages(articles);
-    buildSitemap(articles);
+    buildHomePage(documents);
+    buildDocumentPages(documents);
+    buildSitemap(documents);
     buildRobots();
 
     return {
-        articleCount: articles.length
+        articleCount: documents.length
     };
 }
 
