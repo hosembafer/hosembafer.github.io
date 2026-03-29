@@ -2,7 +2,7 @@
 title: Always Use Domain-Specific Types for Primitives
 description: A practical case for domain-specific types over bare primitives.
 slug: always-use-domain-specific-types-for-primitives
-date: 2026-03-29
+date: 2022-07-14
 updated: 2026-03-29
 type: Engineering Document
 tags:

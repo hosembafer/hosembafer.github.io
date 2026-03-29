@@ -10,6 +10,7 @@ const DOCUMENTS_SRC_DIR = path.join(SRC_DIR, 'documents');
 const TEMPLATES_DIR = path.join(SRC_DIR, 'templates');
 const PARTIALS_DIR = path.join(SRC_DIR, 'partials');
 const OUTPUT_DOCUMENTS_DIR = path.join(ROOT, 'documents');
+const ADR_FILENAME_PATTERN = /^ADR-(?:\d+-)?[^/]+\.md$/;
 
 const SITE = {
     name: 'Rafayel Hovhannisyan',
@@ -180,7 +181,8 @@ function toDate(value, label) {
 }
 
 function loadDocuments() {
-    const filenames = fs.readdirSync(DOCUMENTS_SRC_DIR).filter((name) => name.endsWith('.md') && !name.startsWith('.'));
+    const filenames = fs.readdirSync(DOCUMENTS_SRC_DIR).filter((name) => name.endsWith('.md') && !name.startsWith('.') && !ADR_FILENAME_PATTERN.test(name));
+    const adrFilenames = fs.readdirSync(DOCUMENTS_SRC_DIR).filter((name) => ADR_FILENAME_PATTERN.test(name));
 
     return filenames.map((filename) => {
         const source = readFile(path.join(DOCUMENTS_SRC_DIR, filename));
@@ -198,6 +200,8 @@ function loadDocuments() {
         const publishedAt = data.date ? toDate(data.date, `${filename} date`) : null;
         const updatedAt = data.updated ? toDate(data.updated, `${filename} updated`) : publishedAt;
         const readingTime = data.reading_time || (parsed.content.trim() ? estimateReadingTime(`${data.title} ${parsed.content}`) : null);
+        const adrFilename = adrFilenames.find((name) => name === `ADR-001-${filename}` || name.endsWith(`-${data.slug}.md`));
+        const adrMarkdown = adrFilename ? readFile(path.join(DOCUMENTS_SRC_DIR, adrFilename)) : '';
 
         return {
             title: data.title,
@@ -214,7 +218,10 @@ function loadDocuments() {
             url: articleUrl,
             isExternal,
             sourceName: data.source_name || '',
-            filename
+            filename,
+            markdown: source,
+            adrFilename,
+            adrMarkdown
         };
     }).sort((left, right) => {
         const leftTime = left.date ? left.date.getTime() : 0;
@@ -360,6 +367,7 @@ function buildDocumentPages(documents) {
     <ul class="article-tags">
         ${article.tags.map((tag) => `<li>${tag}</li>`).join('')}
     </ul>
+    ${article.adrFilename ? `<p class="article-actions"><a href="/documents/${article.adrFilename}" download="${article.adrFilename}">Download ADR</a></p>` : ''}
 </article>
 <div class="article-content-wrap">
     <article class="article-content prose">
@@ -425,6 +433,10 @@ ${article.html}
         });
 
         writeFile(path.join(OUTPUT_DOCUMENTS_DIR, article.slug, 'index.html'), html);
+
+        if (article.adrFilename && article.adrMarkdown) {
+            writeFile(path.join(OUTPUT_DOCUMENTS_DIR, article.adrFilename), article.adrMarkdown);
+        }
     }
 }
 

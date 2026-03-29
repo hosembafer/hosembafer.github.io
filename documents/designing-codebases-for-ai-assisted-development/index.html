@@ -22,31 +22,31 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A practical case for domain-specific types over bare primitives.">
+    <meta name="description" content="A practical note on how codebase shape, documentation, token economy, and enforced patterns affect AI-assisted development.">
     <meta name="author" content="Rafayel Hovhannisyan">
     <meta name="robots" content="index, follow">
     <meta name="generator" content="Minimal static site generator">
     <meta name="color-scheme" content="light dark">
-    <link rel="canonical" href="https://hosembafer.github.io/documents/always-use-domain-specific-types-for-primitives">
+    <link rel="canonical" href="https://hosembafer.github.io/documents/designing-codebases-for-ai-assisted-development">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
-    <title>Always Use Domain-Specific Types for Primitives | Rafayel Hovhannisyan</title>
+    <title>Designing Codebases for AI-Assisted Development | Rafayel Hovhannisyan</title>
     <meta property="og:site_name" content="Rafayel Hovhannisyan">
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Always Use Domain-Specific Types for Primitives | Rafayel Hovhannisyan">
-    <meta property="og:description" content="A practical case for domain-specific types over bare primitives.">
-    <meta property="og:url" content="https://hosembafer.github.io/documents/always-use-domain-specific-types-for-primitives">
+    <meta property="og:title" content="Designing Codebases for AI-Assisted Development | Rafayel Hovhannisyan">
+    <meta property="og:description" content="A practical note on how codebase shape, documentation, token economy, and enforced patterns affect AI-assisted development.">
+    <meta property="og:url" content="https://hosembafer.github.io/documents/designing-codebases-for-ai-assisted-development">
     <meta property="og:image" content="https://hosembafer.github.io/images/profile-square.png">
     <meta property="og:image:alt" content="Portrait of Rafayel Hovhannisyan">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Always Use Domain-Specific Types for Primitives | Rafayel Hovhannisyan">
-    <meta name="twitter:description" content="A practical case for domain-specific types over bare primitives.">
+    <meta name="twitter:title" content="Designing Codebases for AI-Assisted Development | Rafayel Hovhannisyan">
+    <meta name="twitter:description" content="A practical note on how codebase shape, documentation, token economy, and enforced patterns affect AI-assisted development.">
     <meta name="twitter:image" content="https://hosembafer.github.io/images/profile-square.png">
-    <meta property="article:published_time" content="2022-07-14T00:00:00.000Z">
-    <meta property="article:modified_time" content="2026-03-29T00:00:00.000Z">
-    <meta property="article:tag" content="type systems">
-    <meta property="article:tag" content="domain modeling">
-    <meta property="article:tag" content="software design">
-    <meta property="article:tag" content="typescript">
+    <meta property="article:published_time" content="2026-03-30T00:00:00.000Z">
+    <meta property="article:modified_time" content="2026-03-30T00:00:00.000Z">
+    <meta property="article:tag" content="ai-assisted development">
+    <meta property="article:tag" content="llms">
+    <meta property="article:tag" content="codebase design">
+    <meta property="article:tag" content="documentation">
     <script type="application/ld+json">
 {
     "@context": "https://schema.org",
@@ -88,10 +88,10 @@
         },
         {
             "@type": "Article",
-            "headline": "Always Use Domain-Specific Types for Primitives",
-            "description": "A practical case for domain-specific types over bare primitives.",
-            "datePublished": "2022-07-14T00:00:00.000Z",
-            "dateModified": "2026-03-29T00:00:00.000Z",
+            "headline": "Designing Codebases for AI-Assisted Development",
+            "description": "A practical note on how codebase shape, documentation, token economy, and enforced patterns affect AI-assisted development.",
+            "datePublished": "2026-03-30T00:00:00.000Z",
+            "dateModified": "2026-03-30T00:00:00.000Z",
             "author": {
                 "@type": "Person",
                 "name": "Rafayel Hovhannisyan",
@@ -100,9 +100,9 @@
             "image": [
                 "https://hosembafer.github.io/images/profile-square.png"
             ],
-            "mainEntityOfPage": "https://hosembafer.github.io/documents/always-use-domain-specific-types-for-primitives",
-            "url": "https://hosembafer.github.io/documents/always-use-domain-specific-types-for-primitives",
-            "keywords": "type systems, domain modeling, software design, typescript"
+            "mainEntityOfPage": "https://hosembafer.github.io/documents/designing-codebases-for-ai-assisted-development",
+            "url": "https://hosembafer.github.io/documents/designing-codebases-for-ai-assisted-development",
+            "keywords": "ai-assisted development, llms, codebase design, documentation"
         },
         {
             "@type": "BreadcrumbList",
@@ -116,8 +116,8 @@
                 {
                     "@type": "ListItem",
                     "position": 2,
-                    "name": "Always Use Domain-Specific Types for Primitives",
-                    "item": "https://hosembafer.github.io/documents/always-use-domain-specific-types-for-primitives"
+                    "name": "Designing Codebases for AI-Assisted Development",
+                    "item": "https://hosembafer.github.io/documents/designing-codebases-for-ai-assisted-development"
                 }
             ]
         }
@@ -143,106 +143,95 @@
         <main>
 
 <article class="article-hero">
-    <div class="article-breadcrumbs"><a href="/">Home</a> / Always Use Domain-Specific Types for Primitives</div>
-    <p class="article-meta"><span>Engineering Document</span><span>July 14, 2022</span><span>5 min read</span></p>
-    <h1>Always Use Domain-Specific Types for Primitives</h1>
-    <p class="article-hero__dek">A practical case for domain-specific types over bare primitives.</p>
+    <div class="article-breadcrumbs"><a href="/">Home</a> / Designing Codebases for AI-Assisted Development</div>
+    <p class="article-meta"><span>Engineering Note</span><span>March 30, 2026</span><span>5 min read</span></p>
+    <h1>Designing Codebases for AI-Assisted Development</h1>
+    <p class="article-hero__dek">A practical note on how codebase shape, documentation, token economy, and enforced patterns affect AI-assisted development.</p>
     <ul class="article-tags">
-        <li>type systems</li><li>domain modeling</li><li>software design</li><li>typescript</li>
+        <li>ai-assisted development</li><li>llms</li><li>codebase design</li><li>documentation</li>
     </ul>
-    <p class="article-actions"><a href="/documents/ADR-always-use-domain-specific-types-for-primitives.md" download="ADR-always-use-domain-specific-types-for-primitives.md">Download ADR</a></p>
+    
 </article>
 <div class="article-content-wrap">
     <article class="article-content prose">
-<h1>Always Use Domain-Specific Types for Primitives</h1>
-<h2>Abstract</h2>
-<p>This document recommends using domain-specific types for values whose meaning matters to the business domain. Primitive types are appropriate for representation, but they are too weak to encode intent, constraints, and safe usage across a system.</p>
-<p>The goal is not to wrap every <code>string</code> or <code>number</code>. The goal is to make ambiguous, high-cost values explicit at system boundaries and inside public APIs, so invalid assumptions become harder to express and easier to detect.</p>
-<h2>Problem</h2>
-<p>Most software systems do not fail because <code>string</code>, <code>number</code>, or <code>boolean</code> are bad tools. They fail because those tools are asked to carry domain meaning that the code never makes explicit.</p>
-<p>A <code>string</code> might be an email address, a country code, a customer id, a discount code, or an ISO timestamp. A <code>number</code> might be money, a quantity, a retry count, or a percentage. The runtime accepts all of them as valid primitives. The business domain does not, because those values are not interchangeable.</p>
-<p>This usually shows up in a few recurring ways:</p>
+<h1>Designing Codebases for AI-Assisted Development</h1>
+<h2>Summary</h2>
+<p>AI-assisted development is mostly a documentation and pattern problem.</p>
+<p>Model quality still matters, but in day-to-day engineering the stronger determinant is the shape of the codebase the model is asked to operate inside. If names are unstable, patterns silently fork, instructions are oversized, and conventions are only implied, the model has too many plausible continuations. If the codebase is coherent, the model has fewer.</p>
+<p>This is why codebase design matters for AI-assisted work. The goal is not to make the repository “AI-friendly” in a superficial sense. The goal is to reduce ambiguity in the places where models infer structure, retrieve facts, and choose between multiple locally plausible implementations.</p>
+<h2>Semantic Association and Conceptual Integrity</h2>
+<p>LLM-based tools operate through semantic association. They infer likely structure from nearby names, repeated code shapes, file organization, examples, and instructions that appear relevant to the current task.</p>
+<p>That makes <a href="/documents/conceptual-integrity-monotonic-pattern-discipline">Conceptual Integrity - Monotonic Pattern Discipline</a> directly relevant to AI-assisted development. A model does not need many competing patterns to become less reliable. Two or three locally valid approaches to the same problem are often enough to make the next suggestion less predictable.</p>
+<p>When one dominant pattern exists, the model has a stronger local precedent:</p>
 <ul>
-<li>multiple parameters share the same primitive type but have different semantics</li>
-<li>validation rules are repeated near call sites instead of being centralized</li>
-<li>identifiers from different contexts can be passed into the same function</li>
-<li>money, percentages, and quantities are all treated as generic numbers</li>
-<li>boolean flags begin to encode business modes rather than simple toggles</li>
+<li>naming becomes easier to continue correctly</li>
+<li>surrounding code provides clearer examples</li>
+<li>retrieval is more likely to surface the right implementation shape</li>
+<li>suggestions are less likely to blend incompatible styles</li>
 </ul>
-<p>These are signs that domain meaning is missing from the type model.</p>
-<h2>Core Principle</h2>
-<p>A primitive tells you how something is represented in memory. It does not tell you what the value is allowed to mean inside the business domain.</p>
-<p>If a function accepts this:</p>
-<div class="code-block"><div class="code-block__label">TypeScript</div><pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">createAccount</span>(<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">email</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">retryCount</span>: <span class="hljs-built_in">number</span></span>) {}
-</code></pre></div><p>the compiler knows almost nothing useful about your intent. Any string can be passed for <code>id</code> or <code>email</code>. Any number can be passed for <code>retryCount</code>, including <code>-10</code>.</p>
-<p>Now compare it with this:</p>
-<div class="code-block"><div class="code-block__label">TypeScript</div><pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">CustomerId</span> = <span class="hljs-built_in">string</span> &amp; { <span class="hljs-keyword">readonly</span> <span class="hljs-attr">brand</span>: <span class="hljs-string">&#x27;CustomerId&#x27;</span> };
-<span class="hljs-keyword">type</span> <span class="hljs-title class_">EmailAddress</span> = <span class="hljs-built_in">string</span> &amp; { <span class="hljs-keyword">readonly</span> <span class="hljs-attr">brand</span>: <span class="hljs-string">&#x27;EmailAddress&#x27;</span> };
-<span class="hljs-keyword">type</span> <span class="hljs-title class_">RetryCount</span> = <span class="hljs-built_in">number</span> &amp; { <span class="hljs-keyword">readonly</span> <span class="hljs-attr">brand</span>: <span class="hljs-string">&#x27;RetryCount&#x27;</span> };
-
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">createAccount</span>(<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-title class_">CustomerId</span>, <span class="hljs-attr">email</span>: <span class="hljs-title class_">EmailAddress</span>, <span class="hljs-attr">retryCount</span>: <span class="hljs-title class_">RetryCount</span></span>) {}
-</code></pre></div><p>The underlying storage is still primitive, but the code now exposes the domain. That improves review quality, reduces accidental mixups, and makes future change much safer.</p>
-<h2>Recommendations</h2>
-<p>Use domain-specific types when swapping two values of the same primitive type would be a real bug.</p>
-<p>Prioritize them in these cases:</p>
+<h2>Token Economy Is a Design Constraint</h2>
+<p>Large context windows do not remove the need for discipline. They make discipline more important.</p>
+<p>Token economy matters for two reasons:</p>
 <ul>
-<li>identifiers</li>
-<li>money and currency amounts</li>
-<li>email addresses, phone numbers, and URLs</li>
-<li>percentages, rates, and quantities</li>
-<li>bounded counters or scores</li>
-<li>date ranges and domain timestamps</li>
+<li>fact retrieval accuracy depends on whether the relevant instruction or example is easy to locate in context</li>
+<li>context window effective load depends on how much low-signal material competes with the task at hand</li>
 </ul>
-<p>Apply them according to these rules:</p>
-<ol>
-<li>parse and validate raw primitives at the system boundary</li>
-<li>convert validated input into domain-specific types</li>
-<li>use domain-specific types throughout the business core</li>
-<li>serialize back to primitives only when data leaves the system</li>
-</ol>
-<p>Values with no business ambiguity and no meaningful rules can remain plain primitives.</p>
-<h2>Boundary Model</h2>
-<div class="mermaid-diagram" data-mermaid-source="flowchart%20LR%0A%20%20Input%5BExternal%20Input%5D%20--%3E%20Validation%5BValidation%20and%20Parsing%5D%0A%20%20Validation%20--%3E%20Domain%5BDomain%20Types%5D%0A%20%20Domain%20--%3E%20Rules%5BBusiness%20Rules%5D%0A%20%20Rules%20--%3E%20Output%5BSerialization%20at%20the%20Boundary%5D"></div><p>The system boundary is where raw primitives should be parsed, validated, and converted into domain values. Once data crosses into the core, it should stop behaving like an anonymous <code>string</code> or <code>number</code>.</p>
-<p>This separation gives the core model stronger guarantees and reduces the chance that invalid or ambiguous values drift through internal code.</p>
-<h2>Examples</h2>
-<h3>Construction and Validation</h3>
-<p>One useful design goal is to make illegal states difficult to represent. Domain constructors and parsers are one of the simplest ways to do that.</p>
-<div class="code-block"><div class="code-block__label">TypeScript</div><pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Percentage</span> = <span class="hljs-built_in">number</span> &amp; { <span class="hljs-keyword">readonly</span> <span class="hljs-attr">brand</span>: <span class="hljs-string">&#x27;Percentage&#x27;</span> };
-
-<span class="hljs-keyword">function</span> <span class="hljs-title function_">makePercentage</span>(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">number</span></span>): <span class="hljs-title class_">Percentage</span> {
-  <span class="hljs-keyword">if</span> (value &lt; <span class="hljs-number">0</span> || value &gt; <span class="hljs-number">100</span>) {
-    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Percentage must be between 0 and 100&#x27;</span>);
-  }
-
-  <span class="hljs-keyword">return</span> value <span class="hljs-keyword">as</span> <span class="hljs-title class_">Percentage</span>;
-}
-</code></pre></div><p>After the value is constructed, downstream code no longer has to wonder whether <code>137</code> accidentally slipped in. Validation becomes part of the type entry point rather than an informal convention scattered across the call graph.</p>
-<h3>API Design</h3>
-<p>APIs become easier to evolve when their signatures express intent clearly. A function that accepts <code>CustomerId</code> is easier to use correctly than one that accepts <code>string</code>. A service returning <code>EmailAddress | null</code> communicates more than one returning <code>string | null</code>.</p>
-<p>This matters even more in larger systems, because types become part of team communication. They document expectations in a way comments rarely sustain over time.</p>
-<p>Domain-specific types help with:</p>
+<p>This is not just a cost issue. It is a reliability issue. A repository may have enough total context capacity to include everything, but that does not mean the model will use every part of it equally well. Long-context guidance from Anthropic and research such as <em>Lost in the Middle</em> point in the same direction: placement, structure, and signal density all matter.</p>
+<p>In practice, that means:</p>
 <ul>
-<li>onboarding, because the vocabulary is embedded in the code</li>
-<li>refactoring, because type errors expose invalid assumptions</li>
-<li>code review, because intent is visible at call sites</li>
-<li>testing, because fixtures are shaped by real business concepts</li>
+<li>avoid oversized top-level instruction files</li>
+<li>avoid repeating the same rule in several weakly different ways</li>
+<li>keep high-signal examples easy to retrieve</li>
+<li>separate durable decisions from operational instructions</li>
 </ul>
-<h2>Exceptions and Tradeoffs</h2>
-<p>It is possible to overdo this. If every line requires a new wrapper or factory, the model can become noisy and harder to use. The answer is not to avoid domain types entirely. The answer is to introduce them where they remove ambiguity rather than where they merely add formality.</p>
-<p>This approach should remain selective:</p>
-<ol>
-<li>start with places where confusion already caused bugs or near-misses</li>
-<li>promote repeated validation rules into constructors or parsers</li>
-<li>make domain names visible in public APIs first</li>
-<li>keep conversion cost near boundaries, not everywhere</li>
-</ol>
+<p>More context is not automatically more clarity. Once noise grows faster than signal, effective context quality drops even if raw context capacity is still available.</p>
+<h2>Documentation as Control Surface</h2>
+<p>Documentation should not be treated as generic prose around the codebase. In AI-assisted development, it becomes part of the control surface.</p>
+<p>Different documents serve different purposes:</p>
+<ul>
+<li><code>CLAUDE.md</code> should carry working instructions, common commands, and task-relevant operating constraints</li>
+<li><code>ADR</code>s should record decisions, tradeoffs, and what the codebase has explicitly chosen</li>
+<li>pattern documents should show canonical solutions for recurring problems</li>
+<li>guidelines should capture defaults, conventions, and team-level expectations</li>
+</ul>
+<p>Collapsing all of that into one giant file usually makes the system worse. The model receives more tokens, but fewer clean signals. Smaller, purpose-specific documents are easier to load, easier to maintain, and easier for both humans and models to apply correctly.</p>
+<p>The same principle applies to examples. A short canonical pattern document plus one strong implementation example is usually more valuable than a long abstract explanation with no concrete precedent.</p>
+<h2>Machine-Enforced Regularity</h2>
+<p>Patterns should be documented, but the most important ones should also be enforced mechanically.</p>
+<p>Linting matters here not because formatting is sacred, but because structural regularity reduces ambiguity. Rules such as import grouping and ordering, member grouping and ordering, and consistent type import usage reduce the number of shapes a file can take.</p>
+<p>That helps in several ways:</p>
+<ul>
+<li>the model sees fewer equivalent but different local forms</li>
+<li>diffs become easier to read and compare</li>
+<li>generated code is less likely to drift into repo-specific style violations</li>
+<li>reviewers spend less time correcting surface inconsistency</li>
+</ul>
+<p>In this sense, linting is part of the AI-assisted development stack. It turns conventions from “good ideas” into guaranteed repository constraints.</p>
+<h2>Operational Feedback Loops</h2>
+<p>AI output should be cheap to verify.</p>
+<p>If build, lint, test, and typecheck workflows are obscure, slow, or inconsistent, low-quality output survives longer than it should. The issue is not that the model made a mistake. The issue is that the repository made the mistake expensive to detect.</p>
+<p>Fast feedback loops improve AI-assisted development because they shorten the path between “plausible” and “proven”. The more quickly a generated change can be checked against real constraints, the less value there is in arguing about whether the output “looks right”.</p>
+<p>One practical trick is to introduce a wrapper command that filters build, format, lint, or test output before it reaches the model. If the wrapper removes warnings, success markers, timing metadata, and other non-actionable noise while preserving errors, the model gets a denser and more useful signal.</p>
+<p>That is another reason to keep operating instructions explicit. Common commands, validation steps, and expected checks belong in the working documentation, not only in team memory.</p>
+<h2>Practical Rules</h2>
+<ul>
+<li>Keep top-level instruction files compact and task-oriented.</li>
+<li>Prefer one dominant pattern per recurring problem.</li>
+<li>Record decisions separately from working instructions.</li>
+<li>Back important conventions with linting and formatting rules.</li>
+<li>Keep canonical examples close to the code they describe.</li>
+<li>Make build, lint, typecheck, and test commands easy to discover.</li>
+<li>Treat every new pattern as a deliberate addition, not a local convenience.</li>
+</ul>
 <h2>References</h2>
-<blockquote>
-<p>A real-world failure case exists outside software APIs as well. <a href="https://www.simscale.com/blog/nasa-mars-climate-orbiter-metric/" target="_blank" rel="noopener">Read</a> <a href="https://solarsystem.nasa.gov/missions/mars-climate-orbiter/in-depth/" target="_blank" rel="noopener">about</a> how NASA lost <strong>Mars Climate Orbiter</strong> on September 23, 1999 due to a failure to translate English units to metric, resulting in a mission loss valued at $125 million at the time.</p>
-</blockquote>
-<h2>Conclusion</h2>
-<p>Bare primitives are cheap to write and expensive to trust. Domain-specific types invert that trade-off. They ask for a bit more intention up front so the rest of the system can be simpler, safer, and easier to read.</p>
-<p>That is usually the right deal. If two values mean different things in the business, they should not look identical in the code.</p>
+<ul>
+<li>Anthropic, <code>Manage Claude's memory</code>: <a href="https://docs.anthropic.com/en/docs/claude-code/memory" target="_blank" rel="noopener">https://docs.anthropic.com/en/docs/claude-code/memory</a></li>
+<li>Anthropic, <code>Long context prompting tips</code>: <a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/long-context-tips" target="_blank" rel="noopener">https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/long-context-tips</a></li>
+<li>Anthropic, <code>Context windows</code>: <a href="https://docs.anthropic.com/en/docs/build-with-claude/context-windows" target="_blank" rel="noopener">https://docs.anthropic.com/en/docs/build-with-claude/context-windows</a></li>
+<li>Liu et al., <code>Lost in the Middle: How Language Models Use Long Contexts</code>: <a href="https://direct.mit.edu/tacl/article/doi/10.1162/tacl_a_00638/119630/Lost-in-the-Middle-How-Language-Models-Use-Long" target="_blank" rel="noopener">https://direct.mit.edu/tacl/article/doi/10.1162/tacl_a_00638/119630/Lost-in-the-Middle-How-Language-Models-Use-Long</a></li>
+<li>typescript-eslint, <code>member-ordering</code>: <a href="https://typescript-eslint.io/rules/member-ordering/" target="_blank" rel="noopener">https://typescript-eslint.io/rules/member-ordering/</a></li>
+<li>ESLint, <code>sort-imports</code>: <a href="https://eslint.org/docs/latest/rules/sort-imports" target="_blank" rel="noopener">https://eslint.org/docs/latest/rules/sort-imports</a></li>
+</ul>
 
     </article>
 </div>

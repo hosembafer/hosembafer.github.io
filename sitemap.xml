@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://hosembafer.github.io</loc></url>
+  <url><loc>https://hosembafer.github.io/documents/designing-codebases-for-ai-assisted-development</loc></url>
+  <url><loc>https://hosembafer.github.io/documents/conceptual-integrity-monotonic-pattern-discipline</loc></url>
   <url><loc>https://hosembafer.github.io/documents/always-use-domain-specific-types-for-primitives</loc></url>
 </urlset>
