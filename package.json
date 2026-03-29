@@ -1,0 +1,25 @@
+{
+  "name": "hosembafer",
+  "version": "1.0.0",
+  "description": "Minimal static site generator for hosembafer.github.io",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "watch": "node scripts/watch.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hosembafer/hosembafer.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hosembafer/hosembafer.github.io/issues"
+  },
+  "homepage": "https://github.com/hosembafer/hosembafer.github.io#readme",
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "highlight.js": "^11.11.1",
+    "markdown-it": "^14.1.1"
+  }
+}

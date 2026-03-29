@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2VTLG8YJG"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-R2VTLG8YJG');
+    </script>
+    <script>
+      (function() {
+        try {
+          var savedTheme = localStorage.getItem('theme');
+          var preferredTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', savedTheme || preferredTheme);
+        } catch (error) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Why meaningful domain types are safer, clearer, and easier to evolve than bare strings, numbers, and booleans.">
+    <meta name="author" content="Rafayel Hovhannisyan">
+    <meta name="robots" content="index, follow">
+    <meta name="generator" content="Minimal static site generator">
+    <meta name="color-scheme" content="light dark">
+    <link rel="canonical" href="https://hosembafer.github.io/articles/always-use-domain-specific-types-for-primitives">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
+    <title>Always Use Domain-Specific Types for Primitives | Rafayel Hovhannisyan</title>
+    <meta property="og:site_name" content="Rafayel Hovhannisyan">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Always Use Domain-Specific Types for Primitives | Rafayel Hovhannisyan">
+    <meta property="og:description" content="Why meaningful domain types are safer, clearer, and easier to evolve than bare strings, numbers, and booleans.">
+    <meta property="og:url" content="https://hosembafer.github.io/articles/always-use-domain-specific-types-for-primitives">
+    <meta property="og:image" content="https://hosembafer.github.io/images/profile-square.png">
+    <meta property="og:image:alt" content="Portrait of Rafayel Hovhannisyan">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Always Use Domain-Specific Types for Primitives | Rafayel Hovhannisyan">
+    <meta name="twitter:description" content="Why meaningful domain types are safer, clearer, and easier to evolve than bare strings, numbers, and booleans.">
+    <meta name="twitter:image" content="https://hosembafer.github.io/images/profile-square.png">
+    <meta property="article:published_time" content="2026-03-29T00:00:00.000Z">
+    <meta property="article:modified_time" content="2026-03-29T00:00:00.000Z">
+    <meta property="article:tag" content="type systems">
+    <meta property="article:tag" content="domain modeling">
+    <meta property="article:tag" content="software design">
+    <meta property="article:tag" content="typescript">
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": "Rafayel Hovhannisyan",
+            "jobTitle": "Senior Software Engineer",
+            "description": "Software engineer with over 15 years of experience building products for startups, scaleups, and large enterprises. Specialized in complex and challenging projects.",
+            "url": "https://hosembafer.github.io",
+            "image": "https://hosembafer.github.io/images/profile.jpg",
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Yerevan",
+                "addressCountry": "Armenia"
+            },
+            "email": "rafayel.hovhannisyan.95@gmail.com",
+            "sameAs": [
+                "https://github.com/hosembafer",
+                "https://www.linkedin.com/in/rafayel-hovhannisyan-3045a09b/",
+                "https://medium.com/@hosembafer"
+            ],
+            "knowsAbout": [
+                "Angular",
+                "NestJS",
+                "React",
+                "Go",
+                "Software Engineering",
+                "Web Development",
+                "Open Source"
+            ],
+            "hasOccupation": {
+                "@type": "Occupation",
+                "name": "Senior Software Engineer",
+                "occupationalCategory": "15-1252.00",
+                "skills": "Angular, NestJS, React, Go, TypeScript, JavaScript"
+            }
+        },
+        {
+            "@type": "Article",
+            "headline": "Always Use Domain-Specific Types for Primitives",
+            "description": "Why meaningful domain types are safer, clearer, and easier to evolve than bare strings, numbers, and booleans.",
+            "datePublished": "2026-03-29T00:00:00.000Z",
+            "dateModified": "2026-03-29T00:00:00.000Z",
+            "author": {
+                "@type": "Person",
+                "name": "Rafayel Hovhannisyan",
+                "url": "https://hosembafer.github.io"
+            },
+            "image": [
+                "https://hosembafer.github.io/images/profile-square.png"
+            ],
+            "mainEntityOfPage": "https://hosembafer.github.io/articles/always-use-domain-specific-types-for-primitives",
+            "url": "https://hosembafer.github.io/articles/always-use-domain-specific-types-for-primitives",
+            "keywords": "type systems, domain modeling, software design, typescript"
+        },
+        {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://hosembafer.github.io"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Always Use Domain-Specific Types for Primitives",
+                    "item": "https://hosembafer.github.io/articles/always-use-domain-specific-types-for-primitives"
+                }
+            ]
+        }
+    ]
+}
+    </script>
+    <style>
+:root{--bg:#f2ede7;--text:#221d17;--text-heading:#221d17;--text-secondary:#2b241d;--text-muted:#665c52;--border:rgba(34,29,23,0.18);--border-photo:rgba(34,29,23,0.24);--link:#7d3c16;--link-hover-bg:#7d3c16;--link-hover-text:#fff7f0;--separator:#9b8d7f;--toggle:#665c52;--code-bg:rgba(34,29,23,0.06);--surface:rgba(255,252,246,0.72);--font-body:"Iowan Old Style","Palatino Linotype","Book Antiqua",Georgia,serif;--font-ui:"Avenir Next","Segoe UI",sans-serif;--font-mono:"SFMono-Regular","Menlo","Monaco","Consolas",monospace}html[data-theme="dark"]{--bg:#151311;--text:#efe5d7;--text-heading:#f5eadc;--text-secondary:#e8ddcf;--text-muted:#b2a697;--border:rgba(239,229,215,0.18);--border-photo:rgba(239,229,215,0.24);--link:#f0a46f;--link-hover-bg:#f0a46f;--link-hover-text:#151311;--separator:#867b70;--toggle:#d6c8b9;--code-bg:rgba(239,229,215,0.08);--surface:rgba(29,25,22,0.68)}*:not(p,ul,ol,li,blockquote){margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{font-family:var(--font-body);line-height:1.6;color:var(--text);background-color:var(--bg);font-size:16px;transition:background-color 0.3s,color 0.3s}p{margin:0.5rem 0}hr{border:none;border-top:1px solid var(--border);margin:1.4rem 0}.container{max-width:900px;margin:0;padding:2rem 3rem;min-height:100vh}header{padding:2rem 0 0.5rem;display:flex;align-items:end;gap:2rem}.profile-photo{border:1px solid var(--border-photo);border-radius:4px;flex-shrink:0;box-sizing:content-box;display:none}.writing,.medium-link{display:none}.header-text{flex:1}h1{font-size:2rem;font-weight:700;color:var(--text-heading);margin-bottom:0.25rem;font-family:var(--font-body)}.subtitle{font-size:1rem;color:var(--text-muted);font-weight:400;margin:0;font-family:var(--font-ui)}main{display:flex;flex-direction:column;gap:1.5rem}h2{font-size:1.25rem;font-weight:700;color:var(--text-heading);margin-bottom:1rem;text-transform:uppercase;letter-spacing:1px;font-family:var(--font-body)}h3{font-size:1.05rem;font-weight:700;color:var(--text-heading);margin-bottom:0.35rem;font-family:var(--font-body)}section p,article p,article li,article blockquote{font-size:1rem;color:var(--text-secondary)}header a,section a,article a{color:var(--link);text-decoration:underline}header a:hover,section a:hover,article a:hover,.email-display code:hover{background-color:var(--link-hover-bg);color:var(--link-hover-text)}.links{list-style:none;display:flex;gap:0.5rem;flex-wrap:wrap;padding-left:0}.links li{display:flex;align-items:center;gap:0.5rem}.links li::after{content:"/";color:var(--separator)}.links li:last-child::after{content:""}.email-display{display:flex;align-items:center;gap:0.5rem;margin-top:0.75rem;font-size:0.95rem;font-family:var(--font-ui)}.email-display code{color:var(--text-secondary);cursor:pointer;text-decoration:underline;font-family:var(--font-mono);padding:0.1rem 0.15rem}.copy-btn{background:none;border:1px solid var(--border);color:var(--text-muted);font-family:var(--font-ui);font-size:0.85rem;padding:0.2rem 0.5rem;cursor:pointer;transition:background-color 0.2s,color 0.2s,border-color 0.2s}.copy-btn:hover{background-color:var(--link-hover-bg);color:var(--link-hover-text);border-color:var(--link-hover-bg)}.copy-btn.copied{border-color:var(--text-muted)}.articles-note,.archive-intro,.article-summary,.article-meta,.article-breadcrumbs,.article-tags,.back-home p{color:var(--text-muted)}.article-list{list-style:none;display:flex;flex-direction:column;gap:1.2rem;padding-left:0;margin:0}.article-item{padding-bottom:1rem;border-bottom:1px solid var(--border)}.article-item:last-child{border-bottom:none;padding-bottom:0}.article-meta{display:flex;gap:0.6rem;flex-wrap:wrap;font-size:0.85rem;margin-bottom:0.3rem;font-family:var(--font-ui)}.article-meta span::after{content:"/";margin-left:0.6rem;color:var(--separator)}.article-meta span:last-child::after{content:"";margin-left:0}.article-summary{margin:0.3rem 0 0}.article-hero{display:flex;flex-direction:column;gap:0.45rem}.article-breadcrumbs,.article-tags{font-size:0.9rem;font-family:var(--font-ui)}.article-hero__dek{font-size:1.05rem}.article-tags{list-style:none;display:flex;gap:0.6rem;flex-wrap:wrap;padding-left:0}.article-tags li::after{content:"/";margin-left:0.6rem;color:var(--separator)}.article-tags li:last-child::after{content:"";margin-left:0}.article-content{padding:0}.prose>*:first-child{margin-top:0}.prose>*:last-child{margin-bottom:0}.prose h1{display:none}.prose h2,.prose h3,.prose h4{margin:1.6rem 0 0.75rem;color:var(--text-heading);font-family:var(--font-ui);text-transform:none;letter-spacing:0}.prose ul,.prose ol{padding-left:1.4rem}.prose li + li{margin-top:0.35rem}.prose blockquote{margin-left:0;padding-left:1rem;border-left:2px solid var(--border-photo)}.prose code{font-family:var(--font-mono);background:var(--code-bg);padding:0.1rem 0.28rem}.prose pre{overflow-x:auto;background:var(--surface);border:1px solid var(--border);padding:1rem}.prose pre code{background:transparent;padding:0}.code-block{margin:1rem 0;border:1px solid var(--border);background:var(--surface)}.code-block__label{padding:0.45rem 0.75rem;border-bottom:1px solid var(--border);color:var(--text-muted);font-size:0.8rem;letter-spacing:0.08em;text-transform:uppercase;font-family:var(--font-ui)}.code-block pre{margin:0;border:none;background:transparent}.hljs{display:block;overflow-x:auto;color:var(--text-secondary)}.hljs-keyword,.hljs-selector-tag,.hljs-title.function_{color:#9a3412}.hljs-string,.hljs-attr,.hljs-template-tag{color:#166534}.hljs-number,.hljs-literal,.hljs-symbol{color:#7c2d12}.hljs-type,.hljs-class .hljs-title,.hljs-built_in{color:#1d4ed8}.hljs-comment,.hljs-quote{color:var(--text-muted);font-style:italic}html[data-theme="dark"] .hljs-keyword,html[data-theme="dark"] .hljs-selector-tag,html[data-theme="dark"] .hljs-title.function_{color:#fdba74}html[data-theme="dark"] .hljs-string,html[data-theme="dark"] .hljs-attr,html[data-theme="dark"] .hljs-template-tag{color:#86efac}html[data-theme="dark"] .hljs-number,html[data-theme="dark"] .hljs-literal,html[data-theme="dark"] .hljs-symbol{color:#fca5a5}html[data-theme="dark"] .hljs-type,html[data-theme="dark"] .hljs-class .hljs-title,html[data-theme="dark"] .hljs-built_in{color:#93c5fd}.mermaid-diagram{border:1px solid var(--border);padding:1rem;margin:1rem 0;background:var(--surface);overflow-x:auto}footer{padding:2rem 0 1rem;color:var(--text-muted);font-size:0.9rem;font-family:var(--font-ui)}.theme-toggle{position:fixed;top:2rem;right:2rem;background:none;border:none;font-size:24px;cursor:pointer;padding:0.5rem;line-height:1;opacity:1;transition:opacity 0.3s,color 0.3s;color:var(--toggle);width:2.5rem;height:2.5rem;display:flex;align-items:center;justify-content:center;font-family:var(--font-ui)}.theme-toggle:hover{opacity:0.7}@media (max-width:768px){.container{padding:1.5rem 1.5rem}header{flex-direction:column;align-items:flex-start;gap:1rem}.profile-photo{width:100px;height:100px}h1{font-size:1.75rem}.article-content{padding:0}}
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">☽</button>
+    <div class="container">
+<header>
+    <img src="/images/profile.jpg" alt="Rafayel Hovhannisyan" class="profile-photo" width="120" height="120" style="display: none">
+    <div class="header-text">
+        <h1>Rafayel Hovhannisyan</h1>
+        <p class="subtitle">Senior Software Engineer at <a href="https://easydmarc.com" target="_blank">EasyDMARC</a></p>
+    </div>
+</header>
+
+        <hr />
+        <main>
+
+<article class="article-hero">
+    <div class="article-breadcrumbs"><a href="/">Home</a> / Always Use Domain-Specific Types for Primitives</div>
+    <p class="article-meta"><span>Architecture Essay</span><span>March 29, 2026</span><span>5 min read</span></p>
+    <h1>Always Use Domain-Specific Types for Primitives</h1>
+    <p class="article-hero__dek">Why meaningful domain types are safer, clearer, and easier to evolve than bare strings, numbers, and booleans.</p>
+    <ul class="article-tags">
+        <li>type systems</li><li>domain modeling</li><li>software design</li><li>typescript</li>
+    </ul>
+</article>
+<div class="article-content-wrap">
+    <article class="article-content prose">
+<h1>Always Use Domain-Specific Types for Primitives</h1>
+<p>Most software systems do not fail because <code>string</code>, <code>number</code>, or <code>boolean</code> are bad tools. They fail because those tools are asked to carry domain meaning that the code never makes explicit.</p>
+<p>A <code>string</code> might be an email address, a country code, a customer id, a discount code, or an ISO timestamp. A <code>number</code> might be money, a quantity, a retry count, or a percentage. The machine is satisfied because all of them are valid primitives. The business is not, because those values are not interchangeable.</p>
+<p>That gap is where confusion enters the system.</p>
+<h2>Primitives Store Data, Types Carry Meaning</h2>
+<p>A primitive tells you how something is represented in memory. It does not tell you what the value is allowed to mean inside the business domain.</p>
+<p>If a function accepts this:</p>
+<div class="code-block"><div class="code-block__label">TypeScript</div><pre><code class="language-ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">createAccount</span>(<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">email</span>: <span class="hljs-built_in">string</span>, <span class="hljs-attr">retryCount</span>: <span class="hljs-built_in">number</span></span>) {}
+</code></pre></div><p>the compiler knows almost nothing useful about your intent. Any string can be passed for <code>id</code> or <code>email</code>. Any number can be passed for <code>retryCount</code>, including <code>-10</code>.</p>
+<p>Now compare it with this:</p>
+<div class="code-block"><div class="code-block__label">TypeScript</div><pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">CustomerId</span> = <span class="hljs-built_in">string</span> &amp; { <span class="hljs-keyword">readonly</span> <span class="hljs-attr">brand</span>: <span class="hljs-string">&#x27;CustomerId&#x27;</span> };
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">EmailAddress</span> = <span class="hljs-built_in">string</span> &amp; { <span class="hljs-keyword">readonly</span> <span class="hljs-attr">brand</span>: <span class="hljs-string">&#x27;EmailAddress&#x27;</span> };
+<span class="hljs-keyword">type</span> <span class="hljs-title class_">RetryCount</span> = <span class="hljs-built_in">number</span> &amp; { <span class="hljs-keyword">readonly</span> <span class="hljs-attr">brand</span>: <span class="hljs-string">&#x27;RetryCount&#x27;</span> };
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">createAccount</span>(<span class="hljs-params"><span class="hljs-attr">id</span>: <span class="hljs-title class_">CustomerId</span>, <span class="hljs-attr">email</span>: <span class="hljs-title class_">EmailAddress</span>, <span class="hljs-attr">retryCount</span>: <span class="hljs-title class_">RetryCount</span></span>) {}
+</code></pre></div><p>The underlying storage is still primitive, but the code now exposes the domain. That improves review quality, reduces accidental mixups, and makes future change much safer.</p>
+<h2>Primitive Obsession Is Really Meaning Obsession</h2>
+<p>Teams often describe this problem as primitive obsession. The deeper problem is not stylistic. It is that the code keeps losing meaning at exactly the places where meaning matters most.</p>
+<p>You can usually spot it when:</p>
+<ul>
+<li>multiple parameters have the same primitive type but different semantics</li>
+<li>validation rules are repeated near call sites</li>
+<li>ids from different contexts can be passed into the same function</li>
+<li>money, percentages, and quantities are all represented as bare numbers</li>
+<li>boolean flags start to encode business modes rather than simple toggles</li>
+</ul>
+<p>These are all signs that the domain model is too weak for the system it is trying to describe.</p>
+<h2>Domain Types Improve Boundaries</h2>
+<p>The biggest benefit of domain-specific primitive types is not just local correctness. It is better boundaries.</p>
+<div class="mermaid-diagram" data-mermaid-source="flowchart%20LR%0A%20%20Input%5BExternal%20Input%5D%20--%3E%20Validation%5BValidation%20and%20Parsing%5D%0A%20%20Validation%20--%3E%20Domain%5BDomain%20Types%5D%0A%20%20Domain%20--%3E%20Rules%5BBusiness%20Rules%5D%0A%20%20Rules%20--%3E%20Output%5BSerialization%20at%20the%20Boundary%5D"></div><p>The boundary is where raw primitives should be parsed, validated, and converted into domain values. Once data crosses into the core of the system, it should stop behaving like an anonymous <code>string</code> or <code>number</code>.</p>
+<p>That creates a simple rule:</p>
+<ul>
+<li>parse primitives at the edge</li>
+<li>use domain types in the core</li>
+<li>serialize back to primitives only when leaving the system</li>
+</ul>
+<p>This separation makes it much harder for invalid or ambiguous values to drift through internal code.</p>
+<blockquote>
+<p>Do you think it’s an imaginary situation? <a href="https://www.simscale.com/blog/nasa-mars-climate-orbiter-metric/" target="_blank" rel="noopener">Read</a> <a href="https://solarsystem.nasa.gov/missions/mars-climate-orbiter/in-depth/" target="_blank" rel="noopener">about</a> how NASA lost one of its spacecrafts (<strong>Mars Climate Orbiter</strong>) due to a metric math mistake on September 23, 1999, which resulted in a costly loss of $125 million ($229M in today’s currency). In short, the mission was unsuccessful due to a navigation error caused by a failure to translate English units to metric.</p>
+</blockquote>
+<h2>The Compiler Should Help With Illegal States</h2>
+<p>One of the most useful design goals in software is to make illegal states difficult or impossible to represent.</p>
+<p>A primitive-heavy model does the opposite. It expands the number of values the system can accept while leaving validation as a social convention.</p>
+<p>For example:</p>
+<div class="code-block"><div class="code-block__label">TypeScript</div><pre><code class="language-ts"><span class="hljs-keyword">type</span> <span class="hljs-title class_">Percentage</span> = <span class="hljs-built_in">number</span> &amp; { <span class="hljs-keyword">readonly</span> <span class="hljs-attr">brand</span>: <span class="hljs-string">&#x27;Percentage&#x27;</span> };
+
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">makePercentage</span>(<span class="hljs-params"><span class="hljs-attr">value</span>: <span class="hljs-built_in">number</span></span>): <span class="hljs-title class_">Percentage</span> {
+  <span class="hljs-keyword">if</span> (value &lt; <span class="hljs-number">0</span> || value &gt; <span class="hljs-number">100</span>) {
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Error</span>(<span class="hljs-string">&#x27;Percentage must be between 0 and 100&#x27;</span>);
+  }
+
+  <span class="hljs-keyword">return</span> value <span class="hljs-keyword">as</span> <span class="hljs-title class_">Percentage</span>;
+}
+</code></pre></div><p>After the value is constructed, downstream code no longer has to wonder whether <code>137</code> accidentally slipped in. The validation becomes part of the type’s entry point, not an informal hope scattered across the call graph.</p>
+<h2>Use Types Where Confusion Is Expensive</h2>
+<p>This does not mean every primitive deserves a wrapper. The point is not ceremony. The point is precision.</p>
+<p>Good candidates for domain-specific types are:</p>
+<ul>
+<li>identifiers</li>
+<li>money and currency amounts</li>
+<li>email addresses, phone numbers, and URLs</li>
+<li>percentages, rates, and quantities</li>
+<li>bounded counters or scores</li>
+<li>date ranges and domain timestamps</li>
+</ul>
+<p>Weak candidates are usually values with no business ambiguity and no rules beyond simple representation.</p>
+<p>The test is straightforward: if swapping two values of the same primitive type would be a real bug, they should probably not share the same type in your domain model.</p>
+<h2>Domain Types Also Improve APIs</h2>
+<p>APIs become easier to evolve when their signatures express intent clearly. A function that accepts <code>CustomerId</code> is easier to use correctly than one that accepts <code>string</code>. A service returning <code>EmailAddress | null</code> communicates more than one returning <code>string | null</code>.</p>
+<p>This matters even more in larger systems, because types become part of team communication. They document expectations in a way comments rarely sustain over time.</p>
+<p>Good domain types help with:</p>
+<ul>
+<li>onboarding, because the vocabulary is embedded in the code</li>
+<li>refactoring, because type errors expose invalid assumptions</li>
+<li>code review, because intent is visible at call sites</li>
+<li>testing, because fixtures are shaped by real business concepts</li>
+</ul>
+<p>That is a compounding advantage, not a local one.</p>
+<h2>The Goal Is Not Fancy Types</h2>
+<p>It is possible to overdo this. If every line requires a new wrapper or factory, the model can become noisy and harder to use. The solution is not to abandon domain types. It is to introduce them where they remove ambiguity rather than where they merely add formality.</p>
+<p>A healthy rule is:</p>
+<ol>
+<li>start with the places where confusion already caused bugs</li>
+<li>promote repeated validation rules into constructors or parsers</li>
+<li>make domain names visible in public APIs first</li>
+<li>keep the conversion cost near boundaries, not everywhere</li>
+</ol>
+<p>This keeps the model practical.</p>
+<h2>Conclusion</h2>
+<p>Bare primitives are cheap to write and expensive to trust. Domain-specific types invert that trade-off. They ask for a bit more intention up front so the rest of the system can be simpler, safer, and easier to read.</p>
+<p>That is usually the right deal. If two values mean different things in the business, they should not look identical in the code.</p>
+
+    </article>
+</div>
+        </main>
+        <hr />
+<footer>
+    <p>&copy; 2026 Rafayel Hovhannisyan</p>
+</footer>
+
+    </div>
+    <script>
+        (function() {
+            var root = document.documentElement;
+            var toggle = document.getElementById('themeToggle');
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+            var mermaidModulePromise;
+            var emailAddress = document.getElementById('emailAddress');
+            var copyBtn = document.getElementById('copyEmail');
+
+            function currentTheme() {
+                return root.getAttribute('data-theme') || 'light';
+            }
+
+            function syncToggleLabel(theme) {
+                if (toggle) {
+                    toggle.textContent = theme === 'dark' ? '☼' : '☽';
+                }
+            }
+
+            function setTheme(theme) {
+                root.setAttribute('data-theme', theme);
+                syncToggleLabel(theme);
+                localStorage.setItem('theme', theme);
+                renderMermaid();
+            }
+
+            async function renderMermaid() {
+                var diagrams = document.querySelectorAll('[data-mermaid-source]');
+                if (!diagrams.length) {
+                    return;
+                }
+
+                if (!mermaidModulePromise) {
+                    mermaidModulePromise = import('https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs');
+                }
+
+                var mermaidLib = await mermaidModulePromise;
+                var mermaid = mermaidLib.default;
+                mermaid.initialize({
+                    startOnLoad: false,
+                    securityLevel: 'loose',
+                    theme: currentTheme() === 'dark' ? 'dark' : 'default'
+                });
+
+                var index = 0;
+                for (var diagram of diagrams) {
+                    var source = decodeURIComponent(diagram.getAttribute('data-mermaid-source') || '');
+                    try {
+                        var result = await mermaid.render('diagram-' + index + '-' + currentTheme(), source);
+                        diagram.innerHTML = result.svg;
+                    } catch (error) {
+                        var fallback = document.createElement('pre');
+                        fallback.textContent = source;
+                        diagram.replaceChildren(fallback);
+                    }
+                    index += 1;
+                }
+            }
+
+            function copyEmail() {
+                if (!emailAddress || !copyBtn || !navigator.clipboard) {
+                    return;
+                }
+
+                var email = emailAddress.textContent;
+                navigator.clipboard.writeText(email).then(function() {
+                    var originalText = copyBtn.textContent;
+                    copyBtn.textContent = 'Copied!';
+                    copyBtn.classList.add('copied');
+                    setTimeout(function() {
+                        copyBtn.textContent = originalText;
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                });
+            }
+
+            syncToggleLabel(currentTheme());
+
+            if (toggle) {
+                toggle.addEventListener('click', function() {
+                    setTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+                });
+            }
+
+            prefersDark.addEventListener('change', function(event) {
+                if (!localStorage.getItem('theme')) {
+                    root.setAttribute('data-theme', event.matches ? 'dark' : 'light');
+                    syncToggleLabel(currentTheme());
+                    renderMermaid();
+                }
+            });
+
+            if (copyBtn) {
+                copyBtn.addEventListener('click', copyEmail);
+            }
+
+            if (emailAddress) {
+                emailAddress.addEventListener('click', copyEmail);
+            }
+
+            renderMermaid();
+        })();
+    </script>
+</body>
+</html>
