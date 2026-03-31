@@ -4,7 +4,8 @@
   "description": "Minimal static site generator for hosembafer.github.io",
   "scripts": {
     "build": "node scripts/build.js",
-    "watch": "node scripts/watch.js"
+    "watch": "node scripts/watch.js",
+    "up": "node scripts/up.js"
   },
   "repository": {
     "type": "git",
