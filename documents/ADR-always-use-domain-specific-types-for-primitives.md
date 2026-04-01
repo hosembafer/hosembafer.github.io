@@ -20,9 +20,9 @@ Primitive values may still be used for transport and storage, but once they cros
 
 **The Three Rules:**
 
-1. **Parse at the Boundary** — External input may enter as primitives, but it must be validated and converted before reaching the core model.
-2. **Preserve Meaning in Types** — Values that mean different things in the business domain must not share the same type only because they share the same runtime representation.
-3. **Centralize Construction** — Validation and invariants must live in constructors, parsers, or other explicit type entry points, not as repeated local checks across the codebase.
+1. **Parse at the Boundary** - External input may enter as primitives, but it must be validated and converted before reaching the core model.
+2. **Preserve Meaning in Types** - Values that mean different things in the business domain must not share the same type only because they share the same runtime representation.
+3. **Centralize Construction** - Validation and invariants must live in constructors, parsers, or other explicit type entry points, not as repeated local checks across the codebase.
 
 ## Examples
 

@@ -44,6 +44,7 @@
     <meta property="article:published_time" content="2026-03-30T00:00:00.000Z">
     <meta property="article:modified_time" content="2026-04-01T00:00:00.000Z">
     <meta property="article:tag" content="ai-assisted development">
+    <meta property="article:tag" content="context engineering">
     <meta property="article:tag" content="llms">
     <meta property="article:tag" content="codebase design">
     <meta property="article:tag" content="documentation">
@@ -102,7 +103,7 @@
             ],
             "mainEntityOfPage": "https://hosembafer.github.io/documents/designing-codebases-for-ai-assisted-development",
             "url": "https://hosembafer.github.io/documents/designing-codebases-for-ai-assisted-development",
-            "keywords": "ai-assisted development, llms, codebase design, documentation"
+            "keywords": "ai-assisted development, context engineering, llms, codebase design, documentation"
         },
         {
             "@type": "BreadcrumbList",
@@ -144,11 +145,11 @@
 
 <article class="article-hero">
     <div class="article-breadcrumbs"><a href="/">Home</a> / Designing Codebases for AI-Assisted Development</div>
-    <p class="article-meta"><span>Engineering Note</span><span>March 30, 2026</span><span>8 min read</span></p>
+    <p class="article-meta"><span>Engineering Note</span><span>March 30, 2026</span><span>13 min read</span></p>
     <h1>Designing Codebases for AI-Assisted Development</h1>
     <p class="article-hero__dek">A practical note on how codebase shape, documentation, token economy, and enforced patterns affect AI-assisted development.</p>
     <ul class="article-tags">
-        <li>ai-assisted development</li><li>llms</li><li>codebase design</li><li>documentation</li>
+        <li>ai-assisted development</li><li>context engineering</li><li>llms</li><li>codebase design</li><li>documentation</li>
     </ul>
     
 </article>
@@ -159,9 +160,10 @@
 <p>AI-assisted development is mostly a documentation and pattern problem.</p>
 <p>Model quality still matters, but in day-to-day engineering the stronger determinant is the shape of the codebase the model is asked to operate inside. If names are unstable, patterns silently fork, instructions are oversized, and conventions are only implied, the model has too many plausible continuations. If the codebase is coherent, the model has fewer.</p>
 <p>This is why codebase design matters for AI-assisted work. The goal is not to make the repository “AI-friendly” in a superficial sense. The goal is to reduce ambiguity in the places where models infer structure, retrieve facts, and choose between multiple locally plausible implementations.</p>
+<hr>
 <h2>Semantic Association and Conceptual Integrity</h2>
-<p>At a behavioral level, LLM-based tools operate through something close to semantic association. They infer likely structure from nearby names, repeated code shapes, file organization, examples, and instructions that appear relevant to the current task. The underlying mechanism is more structured — attention over token sequences, learned syntactic patterns, pattern-completion circuits — but the practical effect for engineers is that models continue what they see nearby.</p>
-<p>That makes <a href="/documents/conceptual-integrity-monotonic-pattern-discipline">Conceptual Integrity - Monotonic Pattern Discipline</a> directly relevant to AI-assisted development. A model does not need many competing patterns to become less reliable. Two or three locally valid approaches to the same problem are often enough to make the next suggestion less predictable. When in-context patterns are ambiguous, the model falls back on pre-training defaults — generic patterns from training data rather than repository-specific conventions.</p>
+<p>LLM-based tools operate through semantic association. They infer likely structure from nearby names, repeated code shapes, file organization, examples, and instructions that appear relevant to the current task.</p>
+<p>That makes <a href="https://hosembafer.github.io/documents/conceptual-integrity-monotonic-pattern-discipline" target="_blank" rel="noopener">Conceptual Integrity - Monotonic Pattern Discipline</a> directly relevant to AI-assisted development. A model does not need many competing patterns to become less reliable. Two or three locally valid approaches to the same problem are often enough to make the next suggestion less predictable. When in-context patterns are ambiguous, the model falls back on pre-training defaults - generic patterns from training data rather than repository-specific conventions.</p>
 <p>When one dominant pattern exists, the model has a stronger local precedent:</p>
 <ul>
 <li>naming becomes easier to continue correctly</li>
@@ -169,48 +171,57 @@
 <li>retrieval is more likely to surface the right implementation shape</li>
 <li>suggestions are less likely to blend incompatible styles</li>
 </ul>
+<p><strong>Scope of this principle.</strong> Pattern uniformity matters most within a bounded unit: a module, a service, a component area. Microservice architectures are deliberately polyglot, and AI tools increasingly operate at that level of granularity rather than across an entire monorepo. The requirement is <em>local</em> consistency - standardize within the unit the agent is working in - not global uniformity across a heterogeneous system. What matters is that the agent sees one dominant pattern <em>in context</em>, not that the entire codebase uses the same pattern everywhere.</p>
+<hr>
 <h2>Names and Types as Steering Mechanisms</h2>
 <p>Names are not just a readability concern. In AI-assisted development, identifiers function as semantic anchors that directly steer model output.</p>
-<p>Research confirms this is a measurable effect. Obfuscating identifiers — replacing <code>MinesweeperGame</code>, <code>sweep</code>, <code>check_won</code> with <code>a1</code>, <code>b2</code>, <code>c3</code> — collapses model summarization to line-by-line descriptions and degrades even execution-prediction tasks. The model relies on names as shortcuts for intent, not just as labels. In dynamically typed languages, naming carries even more weight because there are no type declarations to compensate for a vague or misleading identifier.</p>
-<p>Type annotations matter for a related reason: they narrow the space of plausible completions. Research on type-constrained code generation shows that enforcing type correctness during generation reduces compilation errors by roughly 75% compared to unconstrained output — and syntax-only constraints achieve less than a tenth of that improvement. This aligns with a broader observation: 94% of LLM-generated compilation errors are type-check failures. Types catch the exact class of errors AI produces most.</p>
+<p>Research confirms this is a measurable effect. Le et al. showed that removing identifier names - while leaving code structure intact - causes models to regress from intent-level summaries to line-by-line narration, and degrades tasks that should depend only on structure, such as execution prediction. Wang et al. found consistent degradation on code analysis benchmarks when meaningful names are replaced with opaque identifiers. In dynamically typed languages, naming carries even more weight because type declarations cannot compensate for a vague identifier.</p>
+<p>This effect is not absolute. Fine-tuning on obfuscation-augmented datasets can partially recover performance, and specialized tools exist for working on obfuscated or minified code. But standard models - the ones teams use in practice - rely on names as strong signals for intent, not just as labels. Investing in precise, domain-specific names pays off regardless of tooling.</p>
+<p>Type annotations narrow the space of plausible completions further. A <code>UserId</code> that is structurally incompatible with an <code>OrderId</code> prevents the model from passing the wrong identifier even when both are strings at runtime. Research on type-constrained code generation shows that enforcing type correctness during generation reduces compilation errors by roughly half compared to unconstrained generation, and that syntax-only constraints achieve a fraction of that improvement. The mechanism studied - constrained decoding - is a runtime technique, not a static property of source code. But the underlying principle transfers: the richer the type surface available to the model, the smaller the space of plausible-but-incorrect completions, and the more the compiler or type checker can automatically reject.</p>
+<p>Note that the type-error reduction finding was measured in TypeScript specifically. In dynamically typed languages, LLM-generated errors are more often semantic than type-related, so type annotations cannot be the primary correctness lever there. The broader principle - prefer rich type definitions over untyped or loosely typed code - holds, but its impact varies by language.</p>
 <p>For engineers, this means:</p>
 <ul>
-<li>invest in precise, domain-specific names — a <code>UserId</code> is a stronger signal than a <code>string</code></li>
+<li>invest in precise, domain-specific names - a <code>UserId</code> is a stronger signal than a <code>string</code></li>
 <li>prefer rich type definitions over untyped or loosely typed code</li>
 <li>treat branded types and domain-specific type aliases as part of the AI control surface, not just developer ergonomics</li>
 </ul>
+<hr>
 <h2>Token Economy Is a Design Constraint</h2>
 <p>Large context windows do not remove the need for discipline. They make discipline more important.</p>
 <p>Token economy matters for two reasons:</p>
 <ul>
-<li>fact retrieval accuracy depends on where relevant instructions or examples land in the attention window — positional weighting is not uniform, and information buried in the middle of long contexts receives less attention weight</li>
+<li>fact retrieval accuracy depends on whether the relevant instruction or example is easy to locate in context - positional weighting is not uniform, and models attend less to material in the middle of long contexts</li>
 <li>context window effective load depends on how much low-signal material competes with the task at hand</li>
 </ul>
-<p>This is not just a cost issue. It is a reliability issue. A repository may have enough total context capacity to include everything, but that does not mean the model will use every part of it equally well. Anthropic’s own documentation describes this as <em>context rot</em>: retrieval accuracy decreases as token counts increase, even when the raw capacity is available. Research on positional bias (<em>Lost in the Middle</em>, Liu et al.) shows that models attend less to information in the middle of long contexts. Anthropic’s long-context guidance adds that placement and structure — such as putting queries after long-form data and using explicit structural markers — improve results.</p>
-<p>These findings point in the same direction: placement, structure, and signal density all matter, though each is supported by different evidence.</p>
+<p>This is not just a cost issue. It is a reliability issue. A repository may have enough total context capacity to include everything, but that does not mean the model will use every part of it equally well. The “Lost in the Middle” finding from Liu et al. - that models perform significantly worse on information placed in the middle of long contexts - has been widely replicated and is well-supported across tasks and architectures.</p>
+<p><strong>However, the picture has evolved since 2023.</strong> Recent evaluations of 2025-era frontier models (GPT-4.1, Claude Sonnet 4, Gemini 2.5) show that the original U-shaped positional pattern is partially mitigated in newer models. A more robust concern has replaced it: Du et al. (EMNLP 2025) found that <em>context length alone</em> degrades performance by 13–85%, even when irrelevant tokens are replaced with whitespace and models are constrained to attend only to relevant material. The problem has shifted from “where in the context” to “how much context” - longer windows hurt, regardless of position.</p>
+<p>This is supported from a different angle by empirical work on agent context files (Gloaguen et al., ETH Zurich, 2026): LLM-generated context files reduced task success by ~3% while increasing token cost by over 20%, even though the files were intended to help. Human-written context files provided a marginal ~4% improvement. The conclusion: over-documentation is not a theoretical risk. The distinction between human-written and LLM-generated context matters more than whether a context file exists at all. Counterintuitively, Cursor’s own A/B testing found that providing agents with only tool names and letting them fetch details dynamically - rather than pre-loading full context - reduced total token usage by nearly half while maintaining task success.</p>
 <p>In practice, that means:</p>
 <ul>
-<li>avoid oversized top-level instruction files</li>
+<li>avoid oversized top-level instruction files; Anthropic’s guidance warns that <a href="http://CLAUDE.md" target="_blank" rel="noopener">CLAUDE.md</a> files that are too long cause important rules to get lost in the noise</li>
 <li>avoid repeating the same rule in several weakly different ways</li>
 <li>keep high-signal examples easy to retrieve</li>
 <li>separate durable decisions from operational instructions</li>
+<li>prefer human-written context files; avoid auto-generating them from the codebase</li>
 </ul>
-<p>More context is not automatically more clarity. Research on agent context files (Khandelwal et al., 2026) found that LLM-generated context files can actually reduce task success while increasing token cost — over-documentation is not a theoretical risk. Once noise grows faster than signal, effective context quality drops even if raw context capacity is still available.</p>
+<p>More context is not automatically more clarity. Once noise grows faster than signal, effective context quality drops even if raw context capacity is still available.</p>
+<hr>
 <h2>Documentation as Control Surface</h2>
 <p>Documentation should not be treated as generic prose around the codebase. In AI-assisted development, it becomes part of the control surface.</p>
 <p>Different documents serve different purposes:</p>
 <ul>
-<li><code>CLAUDE.md</code> should carry working instructions, common commands, and task-relevant operating constraints</li>
-<li><code>ADR</code>s should record decisions, tradeoffs, and what the codebase has explicitly chosen</li>
+<li><code>CLAUDE.md</code> / <code>AGENTS.md</code> should carry working instructions, common commands, and task-relevant operating constraints - kept minimal and human-written</li>
+<li>ADRs should record decisions, tradeoffs, and what the codebase has explicitly chosen</li>
 <li>pattern documents should show canonical solutions for recurring problems</li>
 <li>guidelines should capture defaults, conventions, and team-level expectations</li>
 </ul>
 <p>Collapsing all of that into one giant file usually makes the system worse. The model receives more tokens, but fewer clean signals. Smaller, purpose-specific documents are easier to load, easier to maintain, and easier for both humans and models to apply correctly.</p>
-<p>Specificity matters as much as structure. Vague instructions like “follow best practices” are nearly useless — research shows that simply rewording a prompt can cause a 30-point accuracy gap in code generation. Instructions should be concrete enough to verify mechanically: “use <code>Result&lt;T, DomainError&gt;</code> for all repository methods; never throw from a repository” is actionable in a way that “handle errors properly” is not.</p>
-<p>The same principle applies to examples, and this point is worth emphasizing. Concrete code examples are one of the strongest levers available for steering model output — production experience at scale confirms that a handful of canonical examples heavily influences the outcome. The codebase itself is a few-shot prompt. A short canonical pattern document plus one strong implementation example is usually more valuable than a long abstract explanation with no concrete precedent.</p>
+<p>Specificity matters as much as structure. Vague instructions like “follow best practices” provide no actionable constraint. Instructions should be concrete enough to verify mechanically: “use <code>Result&lt;T, DomainError&gt;</code> for all repository methods; never throw from a repository” is actionable in a way that “handle errors properly” is not. Prompt sensitivity research (Gonen et al., EMNLP 2023; Sclar et al., ICLR 2024) shows that surface-level wording changes - not just semantic content - can cause large accuracy swings in code generation tasks. Precise wording is not cosmetic.</p>
+<p>The same principle applies to examples. Spotify’s engineering team, after deploying over 1,500 AI-generated pull requests through their internal coding agent, identified concrete code examples as one of the strongest levers for outcome quality: “Use examples. Having a handful of concrete code examples heavily influences the outcome.” The codebase itself is a few-shot prompt. A short canonical pattern document plus one strong implementation example is usually more valuable than a long abstract explanation with no concrete precedent. Importantly, Spotify’s examples are embedded in agent prompts for specific migration tasks - this is context engineering for agentic workflows, not a claim about codebase architecture in general.</p>
+<hr>
 <h2>Machine-Enforced Regularity</h2>
 <p>Patterns should be documented, but the most important ones should also be enforced mechanically.</p>
-<p>Linting matters here not because formatting is sacred, but because structural regularity reduces ambiguity. Rules such as import grouping and ordering, member grouping and ordering, and consistent type import usage reduce the number of shapes a file can take.</p>
+<p>Linting matters here not because formatting is sacred, but because structural regularity reduces ambiguity. Rules such as import grouping and ordering, member grouping and ordering, and consistent type import usage reduce the number of shapes a file can take. This is largely practitioner intuition rather than a finding with controlled empirical backing - controlled studies of linting’s effect on LLM output quality do not yet exist. But the reasoning is sound: consistent structure reduces token-level variation in what the model sees, which should make next-token prediction more stable.</p>
 <p>That helps in several ways:</p>
 <ul>
 <li>the model sees fewer equivalent but different local forms</li>
@@ -218,41 +229,64 @@
 <li>generated code is less likely to drift into repo-specific style violations</li>
 <li>reviewers spend less time correcting surface inconsistency</li>
 </ul>
+<p>In monorepo setups, module boundary rules deserve special attention. Cross-boundary imports are a common AI-generated error: the model sees a type it needs, finds it in a sibling module, and imports it - without knowing that the architectural intent forbids that dependency. A boundary lint rule catches this automatically and lets the agent self-correct without human intervention.</p>
 <p>In this sense, linting is part of the AI-assisted development stack. It turns conventions from “good ideas” into guaranteed repository constraints.</p>
+<hr>
 <h2>Operational Feedback Loops</h2>
 <p>AI output should be cheap to verify.</p>
 <p>If build, lint, test, and typecheck workflows are obscure, slow, or inconsistent, low-quality output survives longer than it should. The issue is not that the model made a mistake. The issue is that the repository made the mistake expensive to detect.</p>
-<p>Fast feedback loops improve AI-assisted development because they shorten the path between “plausible” and “proven”. The more quickly a generated change can be checked against real constraints, the less value there is in arguing about whether the output “looks right”.</p>
-<p>One practical trick is to introduce a wrapper command that filters build, format, lint, or test output before it reaches the model. If the wrapper removes warnings, success markers, timing metadata, and other non-actionable noise while preserving errors, the model gets a denser and more useful signal.</p>
+<p>Fast feedback loops improve AI-assisted development because they shorten the path between “plausible” and “proven.” The more quickly a generated change can be checked against real constraints, the less value there is in arguing about whether the output “looks right.”</p>
+<p>One practical measure is to introduce a wrapper command that filters build, format, lint, or test output before it reaches the model. If the wrapper removes warnings, success markers, timing metadata, and other non-actionable noise while preserving errors, the model gets a denser and more useful signal. DORA’s 2025 research on AI-assisted development found that teams with loosely coupled architectures and fast feedback loops saw meaningful productivity gains from AI tools, while teams with slow or opaque validation pipelines saw little benefit - the feedback loop, not the model, was the bottleneck.</p>
 <p>That is another reason to keep operating instructions explicit. Common commands, validation steps, and expected checks belong in the working documentation, not only in team memory.</p>
+<hr>
+<h2>Task Decomposition</h2>
+<p>Codebase design sets the ceiling for what the model can reliably do. Task decomposition determines how much of that ceiling the team actually reaches.</p>
+<p>The relationship between task scope and success rate is not linear. Small, well-bounded tasks - a single function, a single component matching a reference pattern, a single entity with tests - succeed at high rates. Larger tasks succeed at much lower rates and require either decomposition or significant human steering. This is a consequence of compound uncertainty: each additional decision the agent must make multiplies the chance of diverging from the intended approach.</p>
+<p>In layered architectures, the most reliable decomposition follows the layers: domain first, then data-access, then feature/UI. Each step has a clear input (the previous layer’s public API), a clear output, and its own verification command. The agent completes and verifies one step before moving to the next.</p>
+<p>Recurring task patterns - “create a new entity,” “add a feature page” - should be codified into reusable workflow definitions rather than free-form prompts. This enforces the team’s preferred decomposition and reference patterns by default.</p>
+<hr>
+<h2>Test Infrastructure as Specification</h2>
+<p>Types constrain the space of code the model can generate. Tests constrain the space of <em>behavior</em> it can produce.</p>
+<p>When a test suite exists before the implementation, it functions as a machine-verifiable specification. The agent generates code, runs the tests, and self-corrects until they pass. This is more reliable than relying on the agent to infer intent from prose, because tests produce binary pass/fail signals rather than probabilistic matches against natural language.</p>
+<p>Kent Beck describes this as TDD becoming a “superpower” with AI agents specifically because tests prevent AI-introduced regressions. The failure mode to watch for is agents deleting or weakening tests in order to make them pass - a signal that the specification is being circumvented rather than satisfied.</p>
+<p>Test factories (Object Mothers, test builders) prevent the agent from constructing invalid test data. Instruction files should direct the agent to use them rather than constructing domain objects directly, for the same reason branded types are preferred over raw primitives.</p>
+<hr>
+<h2>Continuous Calibration</h2>
+<p>Every time a reviewer corrects AI-generated code, there is an implicit signal: the agent’s context was incomplete or its constraints were insufficient. The question to ask is: “Could this correction have been prevented by an instruction file update, a lint rule, or a better canonical example?”</p>
+<p>If yes, the correction should produce a documentation or tooling change in the same review cycle. Over time, this feedback loop transfers patterns from human review memory into the agent’s operating environment. The rate of “same class of correction” recurring should decrease.</p>
+<p>Martin Fowler frames the current posture well: treat every AI output as a pull request from a highly productive but untrustworthy collaborator - review everything, and route the patterns from that review into constraints the collaborator cannot bypass next time.</p>
+<hr>
 <h2>Practical Rules</h2>
 <ul>
-<li>Keep top-level instruction files compact and task-oriented.</li>
-<li>Prefer one dominant pattern per recurring problem.</li>
-<li>Use precise, domain-specific names — they steer model output more than documentation.</li>
-<li>Prefer type-rich definitions over untyped code; types narrow the space of plausible completions.</li>
-<li>Write instructions specific enough to verify mechanically — vague guidance is noise.</li>
+<li>Keep top-level instruction files compact, task-oriented, and human-written.</li>
+<li>Prefer one dominant pattern per recurring problem <em>within a module or service</em>; global uniformity across heterogeneous systems is not required.</li>
+<li>Use precise, domain-specific names and types - they steer the model as much as instructions do.</li>
+<li>Write instructions specific enough to verify mechanically - vague guidance is noise.</li>
 <li>Record decisions separately from working instructions.</li>
-<li>Back important conventions with linting and formatting rules.</li>
-<li>Keep canonical examples close to the code they describe — examples steer more than prose.</li>
-<li>Make build, lint, typecheck, and test commands easy to discover.</li>
-<li>Treat every new pattern as a deliberate addition, not a local convenience.</li>
+<li>Back important conventions with linting and formatting rules, including module boundary enforcement.</li>
+<li>Keep canonical examples close to the code they describe - concrete examples steer more than prose.</li>
+<li>Make build, lint, typecheck, and test commands easy to discover; filter their output to remove noise before it reaches the model.</li>
+<li>Decompose tasks to the smallest independently verifiable unit.</li>
+<li>Write tests before implementation when possible; use test factories to prevent invalid fixtures.</li>
+<li>Treat every recurring review correction as a candidate for a lint rule or instruction update.</li>
 </ul>
+<hr>
 <h2>References</h2>
 <ul>
-<li>Anthropic, <code>Manage Claude's memory</code>: <a href="https://docs.anthropic.com/en/docs/claude-code/memory" target="_blank" rel="noopener">https://docs.anthropic.com/en/docs/claude-code/memory</a></li>
-<li>Anthropic, <code>Effective context engineering for AI agents</code>: <a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener">https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents</a></li>
-<li>Anthropic, <code>Long context prompting tips</code>: <a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/long-context-tips" target="_blank" rel="noopener">https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/long-context-tips</a></li>
-<li>Anthropic, <code>Context windows</code>: <a href="https://docs.anthropic.com/en/docs/build-with-claude/context-windows" target="_blank" rel="noopener">https://docs.anthropic.com/en/docs/build-with-claude/context-windows</a></li>
-<li>Liu et al., <code>Lost in the Middle: How Language Models Use Long Contexts</code>: <a href="https://direct.mit.edu/tacl/article/doi/10.1162/tacl_a_00638/119630/Lost-in-the-Middle-How-Language-Models-Use-Long" target="_blank" rel="noopener">https://direct.mit.edu/tacl/article/doi/10.1162/tacl_a_00638/119630/Lost-in-the-Middle-How-Language-Models-Use-Long</a></li>
-<li>Chroma, <code>Context Rot: How Increasing Input Tokens Impacts LLM Performance</code>: <a href="https://www.trychroma.com/research/context-rot" target="_blank" rel="noopener">https://www.trychroma.com/research/context-rot</a></li>
-<li>Khandelwal et al., <code>How Effective Are Agent Frameworks? Benchmarking AGENTS.md Files</code>: <a href="https://arxiv.org/abs/2602.12843" target="_blank" rel="noopener">https://arxiv.org/abs/2602.12843</a></li>
-<li>DORA, <code>State of AI-assisted Software Development 2025</code>: <a href="https://dora.dev/research/2025/dora-report/" target="_blank" rel="noopener">https://dora.dev/research/2025/dora-report/</a></li>
-<li>Spotify Engineering, <code>Context Engineering: Background Coding Agents</code>: <a href="https://engineering.atspotify.com/2025/11/context-engineering-background-coding-agents-part-2" target="_blank" rel="noopener">https://engineering.atspotify.com/2025/11/context-engineering-background-coding-agents-part-2</a></li>
-<li>Wang et al., <code>How Does Naming Affect LLMs on Code Analysis Tasks?</code>: <a href="https://arxiv.org/abs/2307.12488" target="_blank" rel="noopener">https://arxiv.org/abs/2307.12488</a></li>
-<li>Le et al., <code>When Names Disappear: Revealing What LLMs Actually Understand About Code</code>: <a href="https://arxiv.org/abs/2510.03178" target="_blank" rel="noopener">https://arxiv.org/abs/2510.03178</a></li>
-<li>Muendler et al., <code>Type-Constrained Code Generation with Language Models</code>: <a href="https://arxiv.org/abs/2504.09246" target="_blank" rel="noopener">https://arxiv.org/abs/2504.09246</a></li>
-<li>GitHub, <code>Why AI is pushing developers toward typed languages</code>: <a href="https://github.blog/ai-and-ml/llms/why-ai-is-pushing-developers-toward-typed-languages/" target="_blank" rel="noopener">https://github.blog/ai-and-ml/llms/why-ai-is-pushing-developers-toward-typed-languages/</a></li>
+<li>Anthropic, <em>Manage Claude’s memory</em>: <a href="https://docs.anthropic.com/en/docs/claude-code/memory" target="_blank" rel="noopener">https://docs.anthropic.com/en/docs/claude-code/memory</a></li>
+<li>Anthropic, <em>Long context prompting tips</em>: <a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/long-context-tips" target="_blank" rel="noopener">https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/long-context-tips</a></li>
+<li>Anthropic, <em>Context windows</em>: <a href="https://docs.anthropic.com/en/docs/build-with-claude/context-windows" target="_blank" rel="noopener">https://docs.anthropic.com/en/docs/build-with-claude/context-windows</a></li>
+<li>Liu et al., <em>Lost in the Middle: How Language Models Use Long Contexts</em>, TACL 2024: <a href="https://direct.mit.edu/tacl/article/doi/10.1162/tacl_a_00638/119630/Lost-in-the-Middle-How-Language-Models-Use-Long" target="_blank" rel="noopener">https://direct.mit.edu/tacl/article/doi/10.1162/tacl_a_00638/119630/Lost-in-the-Middle-How-Language-Models-Use-Long</a></li>
+<li>Du et al., <em>Context Length Alone Hurts LLM Performance Despite Perfect Retrieval</em>, EMNLP 2025: <a href="https://arxiv.org/abs/2510.05381" target="_blank" rel="noopener">https://arxiv.org/abs/2510.05381</a></li>
+<li>Gloaguen et al., <em>Evaluating <a href="http://AGENTS.md" target="_blank" rel="noopener">AGENTS.md</a>: Are Repository-Level Context Files Helpful for Coding Agents?</em>, ETH Zurich / <a href="http://LogicStar.ai" target="_blank" rel="noopener">LogicStar.ai</a>, 2026: <a href="https://arxiv.org/abs/2602.11988" target="_blank" rel="noopener">https://arxiv.org/abs/2602.11988</a></li>
+<li>Le et al., <em>When Names Disappear: Revealing What LLMs Actually Understand About Code</em>: <a href="https://arxiv.org/abs/2510.03178" target="_blank" rel="noopener">https://arxiv.org/abs/2510.03178</a></li>
+<li>Wang et al., <em>How Does Naming Affect LLMs on Code Analysis Tasks?</em>: <a href="https://arxiv.org/abs/2307.12488" target="_blank" rel="noopener">https://arxiv.org/abs/2307.12488</a></li>
+<li>Muendler et al., <em>Type-Constrained Code Generation with Language Models</em>: <a href="https://arxiv.org/abs/2504.09246" target="_blank" rel="noopener">https://arxiv.org/abs/2504.09246</a></li>
+<li>Gonen et al., <em>Demystifying Prompts in Language Models via Perplexity Estimation</em>, EMNLP Findings 2023: <a href="https://arxiv.org/abs/2212.04037" target="_blank" rel="noopener">https://arxiv.org/abs/2212.04037</a></li>
+<li>Sclar et al., <em>Quantifying Language Models’ Sensitivity to Spurious Features in Prompt Design</em>, ICLR 2024: <a href="https://arxiv.org/abs/2310.11324" target="_blank" rel="noopener">https://arxiv.org/abs/2310.11324</a></li>
+<li>Spotify Engineering, <em>Background Coding Agents: Context Engineering (Honk, Part 2)</em>: <a href="https://engineering.atspotify.com/2025/11/context-engineering-background-coding-agents-part-2" target="_blank" rel="noopener">https://engineering.atspotify.com/2025/11/context-engineering-background-coding-agents-part-2</a></li>
+<li>DORA, <em>State of DevOps 2025</em>: <a href="https://dora.dev/research/2025/dora-report/" target="_blank" rel="noopener">https://dora.dev/research/2025/dora-report/</a></li>
+<li>GitHub, <em>Why AI is pushing developers toward typed languages</em>: <a href="https://github.blog/ai-and-ml/llms/why-ai-is-pushing-developers-toward-typed-languages/" target="_blank" rel="noopener">https://github.blog/ai-and-ml/llms/why-ai-is-pushing-developers-toward-typed-languages/</a></li>
 <li>typescript-eslint, <code>member-ordering</code>: <a href="https://typescript-eslint.io/rules/member-ordering/" target="_blank" rel="noopener">https://typescript-eslint.io/rules/member-ordering/</a></li>
 <li>ESLint, <code>sort-imports</code>: <a href="https://eslint.org/docs/latest/rules/sort-imports" target="_blank" rel="noopener">https://eslint.org/docs/latest/rules/sort-imports</a></li>
 </ul>
