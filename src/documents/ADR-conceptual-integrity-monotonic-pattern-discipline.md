@@ -1,4 +1,4 @@
-# ADR: Conceptual Integrity — Monotonic Pattern Discipline
+# ADR: Conceptual Integrity - Monotonic Pattern Discipline
 
 |            |            |
 | ---------- | ---------- |
@@ -12,18 +12,18 @@ As a codebase grows across multiple contributors, patterns naturally diverge. Ne
 
 ## Decision
 
-We adopt **Conceptual Integrity — Monotonic Pattern Discipline** as the governing philosophy for all code contributions.
+We adopt **Conceptual Integrity - Monotonic Pattern Discipline** as the governing philosophy for all code contributions.
 
 > _"Conceptual integrity is the most important consideration in system design."_
-> — Fred Brooks, The Mythical Man-Month (1975)
+> - Fred Brooks, The Mythical Man-Month (1975)
 
-Reuse is the default. Deviation is the exception. The set of recognized patterns grows in one controlled direction — they never silently fork.
+Reuse is the default. Deviation is the exception. The set of recognized patterns grows in one controlled direction - they never silently fork.
 
 **The Three Rules:**
 
-1. **Reuse First** — If a pattern exists, use it. A "locally cleaner" variant is still a fork.
-2. **Recognize New Patterns Explicitly** — When an existing pattern cannot serve a new case, the new pattern must be named, documented, justified, and stress-tested against all existing cases — not just the immediate one.
-3. **Global Validation Before Adoption** — A pattern is not proven by working in one place. It must compose with the full codebase without friction, degradation, or unresolved coexistence with what it replaces.
+1. **Reuse First** - If a pattern exists, use it. A "locally cleaner" variant is still a fork.
+2. **Recognize New Patterns Explicitly** - When an existing pattern cannot serve a new case, the new pattern must be named, documented, justified, and stress-tested against all existing cases - not just the immediate one.
+3. **Global Validation Before Adoption** - A pattern is not proven by working in one place. It must compose with the full codebase without friction, degradation, or unresolved coexistence with what it replaces.
 
 ## Consequences
 
@@ -38,6 +38,6 @@ Reuse is the default. Deviation is the exception. The set of recognized patterns
 
 | Anti-pattern            | Why it breaks integrity                               |
 | ----------------------- | ----------------------------------------------------- |
-| Local optimization      | Silent fork — two patterns now exist                  |
+| Local optimization      | Silent fork - two patterns now exist                  |
 | Familiarity bias        | Imports a foreign conceptual model                    |
 | Undocumented divergence | Future readers can't distinguish intent from accident |
